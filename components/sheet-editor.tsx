@@ -111,7 +111,7 @@ const PureSpreadsheetEditor = ({
 
   return (
     <DataGrid
-      className={theme === 'dark' ? 'rdg-dark' : 'rdg-light'}
+      className={`${theme === 'dark' ? 'rdg-dark' : 'rdg-light'} !border-0`}
       columns={columns}
       rows={localRows}
       enableVirtualization
