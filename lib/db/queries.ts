@@ -26,21 +26,21 @@ import { ArtifactKind } from '@/components/artifact';
 const client = postgres(process.env.POSTGRES_URL!);
 const db = drizzle(client);
 
-export async function getUser(email: string): Promise<Array<User>> {
+export async function getUser(clerkId: string): Promise<Array<User>> {
   try {
-    return await db.select().from(user).where(eq(user.email, email));
+    return await db.select().from(user).where(eq(user.id, clerkId));
   } catch (error) {
     console.error('Failed to get user from database');
     throw error;
   }
 }
 
-export async function createUser(email: string, password: string) {
-  const salt = genSaltSync(10);
-  const hash = hashSync(password, salt);
-
+export async function createUser(clerkId: string, email: string) {
   try {
-    return await db.insert(user).values({ email, password: hash });
+    return await db.insert(user).values({
+      id: clerkId,
+      email,
+    });
   } catch (error) {
     console.error('Failed to create user in database');
     throw error;
