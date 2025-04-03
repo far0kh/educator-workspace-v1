@@ -6,7 +6,7 @@ import { ArtifactKind } from '@/components/artifact';
 import { DataStreamWriter } from 'ai';
 import { Document } from '../db/schema';
 import { saveDocument } from '../db/queries';
-import { Session } from 'next-auth';
+import { AuthSession } from '@/lib/types/auth';
 
 export interface SaveDocumentProps {
   id: string;
@@ -20,14 +20,14 @@ export interface CreateDocumentCallbackProps {
   id: string;
   title: string;
   dataStream: DataStreamWriter;
-  session: Session;
+  session: AuthSession;
 }
 
 export interface UpdateDocumentCallbackProps {
   document: Document;
   description: string;
   dataStream: DataStreamWriter;
-  session: Session;
+  session: AuthSession;
 }
 
 export interface DocumentHandler<T = ArtifactKind> {
@@ -51,13 +51,13 @@ export function createDocumentHandler<T extends ArtifactKind>(config: {
         session: args.session,
       });
 
-      if (args.session?.user?.id) {
+      if (args.session?.userId) {
         await saveDocument({
           id: args.id,
           title: args.title,
           content: draftContent,
           kind: config.kind,
-          userId: args.session.user.id,
+          userId: args.session.userId,
         });
       }
 
@@ -71,13 +71,13 @@ export function createDocumentHandler<T extends ArtifactKind>(config: {
         session: args.session,
       });
 
-      if (args.session?.user?.id) {
+      if (args.session?.userId) {
         await saveDocument({
           id: args.document.id,
           title: args.document.title,
           content: draftContent,
           kind: config.kind,
-          userId: args.session.user.id,
+          userId: args.session.userId,
         });
       }
 
@@ -97,3 +97,20 @@ export const documentHandlersByArtifactKind: Array<DocumentHandler> = [
 ];
 
 export const artifactKinds = ['text', 'code', 'image', 'sheet'] as const;
+
+interface SaveDocumentArgs {
+  id: string;
+  content: string;
+  title: string;
+  kind: string;
+  userId: string;
+}
+
+interface SaveSuggestionsArgs {
+  id: string;
+  content: string;
+  title: string;
+  kind: string;
+  userId: string;
+  session: AuthSession;
+}

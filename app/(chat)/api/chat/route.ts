@@ -5,7 +5,7 @@ import {
   smoothStream,
   streamText,
 } from 'ai';
-import { auth } from '@/app/(auth)/auth';
+import { auth } from '@clerk/nextjs/server';
 import { systemPrompt } from '@/lib/ai/prompts';
 import {
   deleteChatById,
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 
     const session = await auth();
 
-    if (!session || !session.user || !session.user.id) {
+    if (!session.userId) {
       return new Response('Unauthorized', { status: 401 });
     }
 
@@ -59,9 +59,9 @@ export async function POST(request: Request) {
         message: userMessage,
       });
 
-      await saveChat({ id, userId: session.user.id, title });
+      await saveChat({ id, userId: session.userId, title });
     } else {
-      if (chat.userId !== session.user.id) {
+      if (chat.userId !== session.userId) {
         return new Response('Unauthorized', { status: 401 });
       }
     }
@@ -90,11 +90,11 @@ export async function POST(request: Request) {
             selectedChatModel === 'chat-model-reasoning'
               ? []
               : [
-                  'getWeather',
-                  'createDocument',
-                  'updateDocument',
-                  'requestSuggestions',
-                ],
+                'getWeather',
+                'createDocument',
+                'updateDocument',
+                'requestSuggestions',
+              ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,
           tools: {
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
             }),
           },
           onFinish: async ({ response }) => {
-            if (session.user?.id) {
+            if (session.userId) {
               try {
                 const assistantId = getTrailingMessageId({
                   messages: response.messages.filter(
@@ -175,14 +175,14 @@ export async function DELETE(request: Request) {
 
   const session = await auth();
 
-  if (!session || !session.user) {
+  if (!session.userId) {
     return new Response('Unauthorized', { status: 401 });
   }
 
   try {
     const chat = await getChatById({ id });
 
-    if (chat.userId !== session.user.id) {
+    if (chat.userId !== session.userId) {
       return new Response('Unauthorized', { status: 401 });
     }
 

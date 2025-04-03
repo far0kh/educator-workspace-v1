@@ -2,7 +2,7 @@ CREATE TABLE "Chat" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"createdAt" timestamp NOT NULL,
 	"title" text NOT NULL,
-	"userId" uuid NOT NULL,
+	"userId" text NOT NULL,
 	"visibility" varchar DEFAULT 'private' NOT NULL
 );
 --> statement-breakpoint
@@ -12,7 +12,7 @@ CREATE TABLE "Document" (
 	"title" text NOT NULL,
 	"content" text,
 	"text" varchar DEFAULT 'text' NOT NULL,
-	"userId" uuid NOT NULL,
+	"userId" text NOT NULL,
 	CONSTRAINT "Document_id_createdAt_pk" PRIMARY KEY("id","createdAt")
 );
 --> statement-breakpoint
@@ -41,13 +41,13 @@ CREATE TABLE "Suggestion" (
 	"suggestedText" text NOT NULL,
 	"description" text,
 	"isResolved" boolean DEFAULT false NOT NULL,
-	"userId" uuid NOT NULL,
+	"userId" text NOT NULL,
 	"createdAt" timestamp NOT NULL,
 	CONSTRAINT "Suggestion_id_pk" PRIMARY KEY("id")
 );
 --> statement-breakpoint
 CREATE TABLE "User" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"email" varchar(64) NOT NULL,
 	"password" varchar(64)
 );

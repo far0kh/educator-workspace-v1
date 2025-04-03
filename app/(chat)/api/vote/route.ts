@@ -1,4 +1,4 @@
-import { auth } from '@/app/(auth)/auth';
+import { auth } from '@clerk/nextjs/server';
 import { getChatById, getVotesByChatId, voteMessage } from '@/lib/db/queries';
 
 export async function GET(request: Request) {
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
   const session = await auth();
 
-  if (!session || !session.user || !session.user.email) {
+  if (!session.userId) {
     return new Response('Unauthorized', { status: 401 });
   }
 
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     return new Response('Chat not found', { status: 404 });
   }
 
-  if (chat.userId !== session.user.id) {
+  if (chat.userId !== session.userId) {
     return new Response('Unauthorized', { status: 401 });
   }
 
@@ -44,7 +44,7 @@ export async function PATCH(request: Request) {
 
   const session = await auth();
 
-  if (!session || !session.user || !session.user.email) {
+  if (!session.userId) {
     return new Response('Unauthorized', { status: 401 });
   }
 
@@ -54,7 +54,7 @@ export async function PATCH(request: Request) {
     return new Response('Chat not found', { status: 404 });
   }
 
-  if (chat.userId !== session.user.id) {
+  if (chat.userId !== session.userId) {
     return new Response('Unauthorized', { status: 401 });
   }
 
