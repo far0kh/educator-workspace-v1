@@ -1,12 +1,16 @@
 import { auth } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { createUser, getUser } from '@/lib/db/queries';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    const { userId, sessionClaims } = await auth();
+    const { userId } = await auth();
 
-    if (!userId) {
+    const reqBody = await request.json();
+
+    const { user_id, email } = reqBody;
+
+    if (!userId || userId !== user_id) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
@@ -15,8 +19,12 @@ export async function POST() {
 
     // If user doesn't exist, create them
     if (users.length === 0) {
-      const email = sessionClaims?.email as string;
-      await createUser(userId, email);
+      if (email) {
+        await createUser(userId, email);
+      } else {
+        console.error('No email found for user:', userId);
+        return new NextResponse('Email is required', { status: 400 });
+      }
     }
 
     return NextResponse.json({ success: true });
