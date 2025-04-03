@@ -7,22 +7,23 @@ export default async function UserSyncPage() {
 
   if (!userId) return redirectToSignIn()
 
-  const users = await getUser(userId)
+  try {
+    // Check if user exists in our database
+    const dbUsers = await getUser(userId)
 
-  // If user doesn't exist, create them
-  if (users.length === 0) {
-    const client = await clerkClient()
-
-    const user = userId ? await client.users.getUser(userId) : null
-
-    if (user && user.id && user.emailAddresses.length > 0) {
-      await createUser(userId, user.emailAddresses[0].emailAddress)
-      console.log(user.emailAddresses[0].emailAddress);
-
-    } else {
-      console.error('No email found for user:', userId)
-      return redirectToSignIn()
+    // If user doesn't exist, create them
+    if (dbUsers.length === 0) {
+      const client = await clerkClient()
+      const user = userId ? await client.users.getUser(userId) : null
+      if (user && user.id && user.emailAddresses.length > 0) {
+        await createUser(userId, user.emailAddresses[0].emailAddress)
+      } else {
+        return redirectToSignIn()
+      }
     }
+  } catch (error) {
+    console.error('Error syncing user:', error)
+    return redirectToSignIn()
   }
 
   return redirect('/chat')
