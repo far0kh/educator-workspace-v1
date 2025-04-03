@@ -23,7 +23,7 @@ export function SidebarUserNav() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <UserButton afterSignOutUrl="/sign-in" />
+        <UserButton />
       </SidebarMenuItem>
     </SidebarMenu>
   );
