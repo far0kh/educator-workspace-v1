@@ -2,7 +2,7 @@ import { auth, clerkClient } from '@clerk/nextjs/server';
 import { createUser, getUser } from '@/lib/db/queries';
 import { redirect } from 'next/navigation';
 
-export default async function UserSyncPage() {
+export default async function Page() {
   const { userId, redirectToSignIn } = await auth()
 
   if (!userId) return redirectToSignIn()

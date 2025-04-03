@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoaderIcon, LogoGoogle } from '@/components/icons'
 
-export default function SignUpPage() {
+export default function Page() {
   return (
     <div className='grid w-full grow justify-center items-center' dir="ltr">
       <SignUp.Root>
