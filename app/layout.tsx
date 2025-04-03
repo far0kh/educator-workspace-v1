@@ -6,7 +6,6 @@ import { ClerkProvider } from '@clerk/nextjs'
 
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-// import { UserSync } from "@/components/auth/UserSync";
 
 import ButtonGradient from "@/components/ui-custom/button-custom/button-gradient";
 
@@ -87,7 +86,6 @@ export default async function RootLayout({
             <div className="flex h-full min-h-screen lg:h-screen w-full overflow-scroll bg-background">
               <div className="flex flex-col flex-1 min-w-0 justify-between">
                 {/* <Header /> */}
-                {/* <UserSync /> */}
                 {children}
                 <ButtonGradient />
                 <Toaster />
