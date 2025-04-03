@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { LoaderIcon } from '@/components/icons'
+import { LoaderIcon, LogoGoogle } from '@/components/icons'
 
 export default function SignUpPage() {
   return (
@@ -41,14 +41,16 @@ export default function SignUpPage() {
                         >
                           <Clerk.Loading scope='provider:google'>
                             {isLoading =>
-                              isLoading ? (
-                                <LoaderIcon />
-                              ) : (
-                                <>
-                                  <LoaderIcon />
-                                  Google
-                                </>
-                              )
+                              <>
+                                {isLoading ? (
+                                  <span className="animate-spin">
+                                    <LoaderIcon />
+                                  </span>
+                                ) : (
+                                  <LogoGoogle />
+                                )}
+                                Google
+                              </>
                             }
                           </Clerk.Loading>
                         </Button>
@@ -107,7 +109,9 @@ export default function SignUpPage() {
                           <Clerk.Loading>
                             {isLoading => {
                               return isLoading ? (
-                                <LoaderIcon />
+                                <span className="animate-spin">
+                                  <LoaderIcon />
+                                </span>
                               ) : (
                                 'Go back'
                               )
@@ -150,7 +154,9 @@ export default function SignUpPage() {
                             <Clerk.Loading>
                               {isLoading => {
                                 return isLoading ? (
-                                  <LoaderIcon />
+                                  <span className="animate-spin">
+                                    <LoaderIcon />
+                                  </span>
                                 ) : (
                                   'Continue'
                                 )
@@ -231,7 +237,9 @@ export default function SignUpPage() {
                             <Clerk.Loading>
                               {isLoading => {
                                 return isLoading ? (
-                                  <LoaderIcon />
+                                  <span className="animate-spin">
+                                    <LoaderIcon />
+                                  </span>
                                 ) : (
                                   'Continue'
                                 )
