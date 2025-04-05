@@ -90,7 +90,6 @@ export default async function RootLayout({
                 {/* <Header /> */}
                 {children}
                 <ButtonGradient />
-                <Toaster />
                 <Footer />
               </div>
             </div>

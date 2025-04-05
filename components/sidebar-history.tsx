@@ -187,9 +187,9 @@ export function SidebarHistory({ user }: { user: { id: string; email: string } |
 
     setShowDeleteDialog(false);
 
-    if (deleteId === id) {
-      router.push('/');
-    }
+    // if (deleteId === id) {
+    router.push('/chat');
+    // }
   };
 
   if (!user) {
