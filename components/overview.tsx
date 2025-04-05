@@ -15,9 +15,9 @@ export const Overview = () => {
     >
       <div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center max-w-xl">
         <div className="flex flex-row justify-center gap-4 items-center">
-          <h1 className="text-4xl md:text-5xl font-black text-balance">{`${Pages.chat.welcome.hello} 👋`}</h1>
+          <h1 className="text-4xl md:text-5xl font-black text-balance">{Pages.chat.welcome.hello}</h1>
         </div>
-        <div className="text-muted-foreground">
+        <div className="text-lg md:text-xl font-medium text-balance text-muted-foreground">
           <ReactMarkdown>{Pages.chat.welcome.description}</ReactMarkdown>
         </div>
       </div>

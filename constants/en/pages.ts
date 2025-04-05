@@ -8,8 +8,8 @@ const Pages = {
   },
   chat: {
     welcome: {
-      hello: "Hello",
-      description: "Welcome to your workspace. Let's get started!",
+      hello: "Hello 👋",
+      description: "Welcome to your workspace.\n\n*Let's get started!*",
       prompts: ["I want to create a new course.", "I want to view my courses."],
     },
     sidebar: {
