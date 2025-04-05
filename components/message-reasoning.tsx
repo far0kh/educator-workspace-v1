@@ -46,7 +46,6 @@ export function MessageReasoning({
           <button
             data-testid="message-reasoning-toggle"
             type="button"
-            className="cursor-pointer"
             onClick={() => {
               setIsExpanded(!isExpanded);
             }}

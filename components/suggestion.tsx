@@ -55,7 +55,7 @@ export const Suggestion = ({
             </div>
             <button
               type="button"
-              className="text-xs text-gray-500 cursor-pointer"
+              className="text-xs text-gray-500"
               onClick={() => {
                 setIsExpanded(false);
               }}

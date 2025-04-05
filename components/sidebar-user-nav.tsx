@@ -58,7 +58,7 @@ export function SidebarUserNav() {
             <DropdownMenuItem asChild>
               <button
                 type="button"
-                className="w-full cursor-pointer"
+                className="w-[100px]"
                 onClick={() => signOut({ redirectUrl: '/' })}
               >
                 <Power className="h-4 w-4 text-red-500" />
