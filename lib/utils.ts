@@ -164,3 +164,8 @@ export function getTrailingMessageId({
 
   return trailingMessage.id;
 }
+
+export function truncateEmail(email: string): string {
+  const parts = email.split('@');
+  return `${parts[0].substring(0, 2)}...${parts[0].substring(parts[0].length - 2)}@${parts[1]}`;
+}

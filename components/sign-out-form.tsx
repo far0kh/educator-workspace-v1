@@ -1,16 +1,20 @@
 'use client';
 
 import { useClerk } from '@clerk/nextjs';
+import { Button } from './ui/button';
 
 export const SignOutForm = () => {
   const { signOut } = useClerk();
 
   return (
-    <button
+    <Button
+      size='default'
+      variant='ghost'
+      type='button'
       onClick={() => signOut({ redirectUrl: '/' })}
-      className="w-full text-left px-1 py-0.5 text-red-500"
+      className='w-full'
     >
       Sign out
-    </button>
-  );
-};
+    </Button>
+  )
+}
