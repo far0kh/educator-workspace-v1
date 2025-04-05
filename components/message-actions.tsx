@@ -1,7 +1,7 @@
 import type { Message } from 'ai';
 import { useSWRConfig } from 'swr';
 import { useCopyToClipboard } from 'usehooks-ts';
-
+import { cn } from '@/lib/utils';
 import type { Vote } from '@/lib/db/schema';
 
 import { CopyIcon, ThumbDownIcon, ThumbUpIcon } from './icons';
@@ -67,7 +67,9 @@ export function PureMessageActions({
           <TooltipTrigger asChild>
             <Button
               data-testid="message-upvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              className={cn('py-1 px-2 h-fit text-muted-foreground !pointer-events-auto', {
+                '!text-green-600': vote?.isUpvoted,
+              })}
               disabled={vote?.isUpvoted}
               variant="outline"
               onClick={async () => {
@@ -120,7 +122,9 @@ export function PureMessageActions({
           <TooltipTrigger asChild>
             <Button
               data-testid="message-downvote"
-              className="py-1 px-2 h-fit text-muted-foreground !pointer-events-auto"
+              className={cn('py-1 px-2 h-fit text-muted-foreground !pointer-events-auto', {
+                '!text-orange-600': vote && !vote.isUpvoted,
+              })}
               variant="outline"
               disabled={vote && !vote.isUpvoted}
               onClick={async () => {
