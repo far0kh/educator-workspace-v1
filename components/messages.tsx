@@ -6,6 +6,7 @@ import { memo } from 'react';
 import { Vote } from '@/lib/db/schema';
 import equal from 'fast-deep-equal';
 import { UseChatHelpers } from '@ai-sdk/react';
+import { cn } from '@/lib/utils';
 
 interface MessagesProps {
   chatId: string;
@@ -33,7 +34,11 @@ function PureMessages({
   return (
     <div
       ref={messagesContainerRef}
-      className="flex flex-col justify-center min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
+      className={cn('flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4',
+        {
+          'justify-center': messages.length === 0,
+        },
+      )}
     >
       {messages.length === 0 && <Overview />}
 

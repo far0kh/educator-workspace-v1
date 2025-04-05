@@ -79,7 +79,9 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <main className="flex h-full min-h-screen lg:h-screen w-full overflow-scroll bg-background">
+              {children}
+            </main>
             <Toaster position="top-center" />
           </ThemeProvider>
         </body>
