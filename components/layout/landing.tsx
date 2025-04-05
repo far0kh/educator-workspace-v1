@@ -56,7 +56,7 @@ const Landing = () => {
                 <ButtonCustom
                   className="font-semibold"
                   px="px-12"
-                  onClick={() => router.push('/workspace')}
+                  onClick={() => router.push('/chat')}
                 >
                   Go To Workspace
                 </ButtonCustom>

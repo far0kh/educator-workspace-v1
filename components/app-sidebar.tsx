@@ -27,14 +27,14 @@ export function AppSidebar({ user }: { user: { id: string; email: string } | nul
         <SidebarMenu>
           <div className="flex flex-row justify-between items-center">
             <Link
-              href="/chat"
+              href="/"
               onClick={() => {
                 setOpenMobile(false);
               }}
               className="flex flex-row gap-3 items-center"
             >
               <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer">
-                Chatbot
+                Home
               </span>
             </Link>
             <Tooltip>

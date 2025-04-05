@@ -4,11 +4,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs'
 
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-
-import ButtonGradient from "@/components/ui-custom/button-custom/button-gradient";
-
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -84,15 +79,8 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            {children}
             <Toaster position="top-center" />
-            <div className="flex h-full min-h-screen lg:h-screen w-full overflow-scroll bg-background">
-              <div className="flex flex-col flex-1 min-w-0 justify-between">
-                {/* <Header /> */}
-                {children}
-                <ButtonGradient />
-                <Footer />
-              </div>
-            </div>
           </ThemeProvider>
         </body>
       </html>
