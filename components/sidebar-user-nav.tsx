@@ -46,7 +46,7 @@ export function SidebarUserNav() {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             side="top"
-            className="w-[--radix-popper-anchor-width]"
+            className="w-68 md:w-60"
           >
             <DropdownMenuItem
               className="cursor-pointer"

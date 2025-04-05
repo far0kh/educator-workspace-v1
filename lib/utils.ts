@@ -167,5 +167,6 @@ export function getTrailingMessageId({
 
 export function truncateEmail(email: string): string {
   const parts = email.split('@');
-  return `${parts[0].substring(0, 2)}...${parts[0].substring(parts[0].length - 2)}@${parts[1]}`;
+  parts[0].length > 10 && (parts[0] = `${parts[0].substring(0, 9)}...`);
+  return `${parts[0]}@${parts[1]}`;
 }
