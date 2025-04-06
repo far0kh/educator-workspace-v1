@@ -49,21 +49,16 @@ export function SidebarUserNav() {
             className="w-68 md:w-60"
           >
             <DropdownMenuItem
-              className="cursor-pointer"
               onSelect={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
               {`Toggle ${theme === 'light' ? 'dark' : 'light'} mode`}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <button
-                type="button"
-                className="w-full"
-                onClick={() => signOut({ redirectUrl: '/' })}
-              >
-                <Power className="h-4 w-4 text-red-500" />
-                Sign out
-              </button>
+            <DropdownMenuItem
+              onSelect={() => signOut({ redirectUrl: '/' })}
+            >
+              <Power className="h-4 w-4 text-red-500" />
+              Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

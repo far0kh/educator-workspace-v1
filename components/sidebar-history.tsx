@@ -48,6 +48,7 @@ import {
 import type { Chat } from '@/lib/db/schema';
 import { fetcher } from '@/lib/utils';
 import { useChatVisibility } from '@/hooks/use-chat-visibility';
+import { time } from 'console';
 
 type GroupedChats = {
   today: Chat[];
@@ -168,8 +169,15 @@ export function SidebarHistory({ user }: { user: { id: string; email: string } |
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const router = useRouter();
   const handleDelete = async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+
     const deletePromise = fetch(`/api/chat?id=${deleteId}`, {
       method: 'DELETE',
+      signal: controller.signal,
+    }).then(() => {
+      clearTimeout(timeoutId);
+      router.push('/chat')
     });
 
     toast.promise(deletePromise, {
@@ -188,7 +196,7 @@ export function SidebarHistory({ user }: { user: { id: string; email: string } |
     setShowDeleteDialog(false);
 
     // if (deleteId === id) {
-    router.push('/chat');
+    // router.push('/chat');
     // }
   };
 
