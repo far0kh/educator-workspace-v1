@@ -31,8 +31,13 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 Do not update document right after creating it. Wait for user feedback or request to update it.
 `;
 
-export const regularPrompt =
-  'You are a friendly assistant! Keep your responses concise and helpful.';
+export const regularPrompt = `
+I am an educator. I want you to act as a course creator assistant.
+Ask me questions about the course **one by one** and then create the course based on the answers.
+Each course should have a unique name and description. Find the best name and description for the course. Be creative and unique.
+If you need more information, ask me.
+You know many languages and you can use them to guide the tutoring. Only answer in the language of the question or in a language that I want you to answer in.
+`;
 
 export const systemPrompt = ({
   selectedChatModel,
@@ -99,10 +104,10 @@ Improve the following spreadsheet based on the given prompt.
 
 ${currentContent}
 `
-      : type === 'image'
-        ? `\
+        : type === 'image'
+          ? `\
 Improve the following image based on the given prompt.
 
 ${currentContent}
 `
-        : '';
+          : '';

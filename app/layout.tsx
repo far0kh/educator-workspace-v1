@@ -1,6 +1,6 @@
 import { Toaster } from 'sonner';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter, Vazirmatn, Poppins } from "next/font/google";
 import { ThemeProvider } from '@/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs'
 
@@ -19,17 +19,28 @@ export const viewport = {
   maximumScale: 1, // Disable auto-zoom on mobile Safari
 };
 
-const geist = Geist({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-geist',
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+})
+
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic", "latin"],
+  display: "swap",
+  variable: "--font-vazirmatn",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-geist-mono',
+const poppins = Poppins({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-poppins",
+  weight: ["900"],
 });
+
+const fonts = `${inter.variable} ${vazirmatn.variable} ${poppins.variable}`
 
 const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
 const DARK_THEME_COLOR = 'hsl(240deg 10% 3.92%)';
@@ -63,7 +74,6 @@ export default async function RootLayout({
       <html
         lang="en"
         suppressHydrationWarning
-        className={`${geist.variable} ${geistMono.variable}`}
       >
         <head>
           <script
@@ -72,7 +82,7 @@ export default async function RootLayout({
             }}
           />
         </head>
-        <body className="antialiased">
+        <body className={`${fonts} antialiased`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
