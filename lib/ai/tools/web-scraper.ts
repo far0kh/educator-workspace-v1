@@ -15,9 +15,12 @@ export const webScraper = tool({
       const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
       const title = titleMatch ? titleMatch[1].trim() : 'No title';
 
+      const descriptionMatch = html.match(/<meta name="description" content="(.*?)"/i)
+      const description = descriptionMatch ? descriptionMatch[1] : undefined
+
       // Extract Open Graph metadata
       const ogTitle = extractMetaContent(html, 'og:title') || title;
-      const ogDescription = extractMetaContent(html, 'og:description');
+      const ogDescription = extractMetaContent(html, 'og:description') || description;
       const ogImage = extractMetaContent(html, 'og:image');
       const ogSiteName = extractMetaContent(html, 'og:site_name');
 
@@ -60,14 +63,13 @@ export const webScraper = tool({
         .replace(/&[^;]+;/g, ' ')
         .trim();
 
-      console.log(ogImage, favicon);
-
       return {
         title: ogTitle,
         description: ogDescription || textContent.substring(0, 200) + '...',
         image: ogImage,
         siteName: ogSiteName,
         favicon: favicon,
+        content: textContent,
         url: url
       };
     } catch (error) {

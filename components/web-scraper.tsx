@@ -9,6 +9,7 @@ interface WebScraperProps {
     image?: string;
     siteName?: string;
     favicon?: string;
+    content: string;
     url: string;
     error?: string;
     details?: string;
@@ -75,6 +76,11 @@ export function WebScraper({ scrapedData }: WebScraperProps) {
             />
           </div>
         )}
+        <CardContent className="hidden">
+          <p className="text-sm text-muted-foreground line-clamp-3">
+            {scrapedData.content}
+          </p>
+        </CardContent>
       </a>
     </Card>
   );
