@@ -4,10 +4,18 @@ const nextConfig: NextConfig = {
   experimental: {
     ppr: true,
   },
+  // images: {
+  //   remotePatterns: [
+  //     {
+  //       hostname: 'img.clerk.com',
+  //     },
+  //   ],
+  // },
   images: {
     remotePatterns: [
       {
-        hostname: 'img.clerk.com',
+        protocol: "https",
+        hostname: "*", // Allow images from all domains
       },
     ],
   },
