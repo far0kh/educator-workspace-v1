@@ -5,12 +5,13 @@ import remarkGfm from 'remark-gfm';
 import { CodeBlock } from './code-block';
 
 const components: Partial<Components> = {
-  // @ts-expect-error
-  code: CodeBlock,
+  // // @ts-expect-error
+  // code: CodeBlock,
+  code: ({ children }) => <>{<Markdown>{String(children)}</Markdown>}</>,
   pre: ({ children }) => <>{children}</>,
   ol: ({ node, children, ...props }) => {
     return (
-      <ol className="list-decimal list-outside ml-4" {...props}>
+      <ol className="list-decimal list-outside ms-4" {...props}>
         {children}
       </ol>
     );
@@ -24,7 +25,7 @@ const components: Partial<Components> = {
   },
   ul: ({ node, children, ...props }) => {
     return (
-      <ul className="list-decimal list-outside ml-4" {...props}>
+      <ul className="list-decimal list-outside ms-4" {...props}>
         {children}
       </ul>
     );

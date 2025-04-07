@@ -61,8 +61,8 @@ export function WebScraper({ scrapedData }: WebScraperProps) {
               {scrapedData.siteName || new URL(scrapedData.url).hostname}
             </span>
           </div>
-          <h3 className="font-semibold mb-1 line-clamp-2">{scrapedData.title}</h3>
-          <p className="text-sm text-muted-foreground line-clamp-2">
+          <h3 className="font-semibold mb-1 line-clamp-2" dir="auto">{scrapedData.title}</h3>
+          <p className="text-sm text-muted-foreground line-clamp-2" dir="auto">
             {scrapedData.description}
           </p>
         </div>
