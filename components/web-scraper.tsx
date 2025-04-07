@@ -47,10 +47,10 @@ export function WebScraper({ scrapedData }: WebScraperProps) {
         <div className="p-4">
           <div className="flex items-center gap-2 mb-2">
             {scrapedData.favicon && (
-              <div className="relative w-4 h-4">
+              <div className="relative w-6 h-6">
                 <Image
                   src={scrapedData.favicon}
-                  alt=""
+                  alt={scrapedData.title}
                   fill
                   className="object-contain"
                 />
