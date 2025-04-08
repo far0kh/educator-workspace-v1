@@ -5,8 +5,8 @@ import { PDFExtract } from 'pdf.js-extract';
 const pdfExtract = new PDFExtract();
 
 // Get limitations from environment variables
-const MAX_FILE_SIZE_MB = parseInt(process.env.MAX_FILE_SIZE_MB || '5', 10);
-const MAX_PAGE_COUNT = parseInt(process.env.PDF_MAX_PAGE_COUNT || '50', 10);
+const PDF_MAX_FILE_SIZE_MB = parseInt(process.env.PDF_MAX_FILE_SIZE_MB || '5', 10);
+const PDF_MAX_PAGE_COUNT = parseInt(process.env.PDF_MAX_PAGE_COUNT || '50', 10);
 
 interface PDFItem {
   str: string;
@@ -18,7 +18,7 @@ interface PDFItem {
 }
 
 export const pdfToMarkdown = tool({
-  description: `Convert PDF content to Markdown text. Limitations: Max file size ${MAX_FILE_SIZE_MB}MB, Max pages ${MAX_PAGE_COUNT}`,
+  description: `Convert PDF content to Markdown text. Limitations: Max file size ${PDF_MAX_FILE_SIZE_MB}MB, Max pages ${PDF_MAX_PAGE_COUNT}`,
   parameters: z.object({
     // Note: Do not edit this line
     pdfUrl: z.string(),
@@ -32,10 +32,10 @@ export const pdfToMarkdown = tool({
       const contentLength = response.headers.get('content-length');
       if (contentLength) {
         const fileSizeMB = parseInt(contentLength, 10) / (1024 * 1024);
-        if (fileSizeMB > MAX_FILE_SIZE_MB) {
+        if (fileSizeMB > PDF_MAX_FILE_SIZE_MB) {
           return {
             error: 'PDF file too large',
-            details: `File size (${fileSizeMB.toFixed(2)}MB) exceeds the maximum allowed size of ${MAX_FILE_SIZE_MB}MB`
+            details: `File size (${fileSizeMB.toFixed(2)}MB) exceeds the maximum allowed size of ${PDF_MAX_FILE_SIZE_MB}MB`
           };
         }
       }
@@ -46,10 +46,10 @@ export const pdfToMarkdown = tool({
       const data = await pdfExtract.extractBuffer(Buffer.from(pdfBuffer));
 
       // Check page count
-      if (data.pages.length > MAX_PAGE_COUNT) {
+      if (data.pages.length > PDF_MAX_PAGE_COUNT) {
         return {
           error: 'PDF has too many pages',
-          details: `Page count (${data.pages.length}) exceeds the maximum allowed pages of ${MAX_PAGE_COUNT}`
+          details: `Page count (${data.pages.length}) exceeds the maximum allowed pages of ${PDF_MAX_PAGE_COUNT}`
         };
       }
 
