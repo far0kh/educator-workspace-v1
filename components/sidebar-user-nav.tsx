@@ -54,7 +54,7 @@ export function SidebarUserNav() {
     toast.promise(deletePromise, {
       loading: 'Deleting chats...',
       success: () => {
-        router.refresh();
+        location.reload();
         return 'Chats deleted successfully';
       },
       error: 'Failed to delete chats',
