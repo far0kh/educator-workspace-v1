@@ -88,15 +88,20 @@ export async function POST(request: Request) {
           messages,
           maxSteps: 5,
           experimental_activeTools:
-            selectedChatModel === 'chat-model-reasoning'
-              ? []
+            selectedChatModel === 'chat-model-educator'
+              ? [
+                'createDocument',
+                'updateDocument',
+                'requestSuggestions',
+                'webScraper',
+                'pdfToMarkdown',
+              ]
               : [
                 'getWeather',
                 'createDocument',
                 'updateDocument',
                 'requestSuggestions',
                 'webScraper',
-                'pdfToMarkdown',
               ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,

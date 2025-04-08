@@ -9,12 +9,12 @@ interface ChatModel {
 export const chatModels: Array<ChatModel> = [
   {
     id: 'chat-model',
-    name: 'Chat model',
+    name: 'General Chat',
     description: 'Primary model for all-purpose chat',
   },
   {
-    id: 'chat-model-reasoning',
-    name: 'Reasoning model',
-    description: 'Uses advanced reasoning',
+    id: 'chat-model-educator',
+    name: 'Course Creator',
+    description: 'Custom model for creating courses and educational content',
   },
 ];

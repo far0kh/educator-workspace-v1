@@ -8,6 +8,7 @@ import { google } from '@ai-sdk/google';
 export const myProvider = customProvider({
   languageModels: {
     'chat-model': google('gemini-2.0-flash'),
+    'chat-model-educator': google('gemini-2.0-flash'),
     'chat-model-reasoning': wrapLanguageModel({
       model: google('gemini-2.0-flash'),
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
