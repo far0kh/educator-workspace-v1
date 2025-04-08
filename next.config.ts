@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  reactStrictMode: true,
   experimental: {
     ppr: true,
   },
@@ -19,6 +20,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  serverExternalPackages: ["pdf.js-extract", "pdf-parse"],
 };
 
 export default nextConfig;
