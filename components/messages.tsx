@@ -2,7 +2,7 @@ import { UIMessage } from 'ai';
 import { PreviewMessage, ThinkingMessage } from './message';
 import { useScrollToBottom } from './use-scroll-to-bottom';
 import { Overview } from './overview';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Vote } from '@/lib/db/schema';
 import equal from 'fast-deep-equal';
 import { UseChatHelpers } from '@ai-sdk/react';
@@ -28,8 +28,18 @@ function PureMessages({
   reload,
   isReadonly,
 }: MessagesProps) {
-  const [messagesContainerRef, messagesEndRef] =
-    useScrollToBottom<HTMLDivElement>();
+  const [messagesContainerRef, messagesEndRef, setAutoScrollEnabled] = useScrollToBottom<HTMLDivElement>();
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+
+  const handleEditStart = (messageId: string) => {
+    setEditingMessageId(messageId);
+    setAutoScrollEnabled(false);
+  };
+
+  const handleEditEnd = () => {
+    setEditingMessageId(null);
+    setAutoScrollEnabled(true);
+  };
 
   return (
     <div
@@ -56,6 +66,9 @@ function PureMessages({
           setMessages={setMessages}
           reload={reload}
           isReadonly={isReadonly}
+          isEditing={editingMessageId === message.id}
+          onEditStart={handleEditStart}
+          onEditEnd={handleEditEnd}
         />
       ))}
 

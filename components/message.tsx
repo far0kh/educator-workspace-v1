@@ -20,6 +20,7 @@ import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
 import { UseChatHelpers } from '@ai-sdk/react';
 import { WebScraper } from './web-scraper';
+import { useScrollToBottom } from './use-scroll-to-bottom';
 
 const PurePreviewMessage = ({
   chatId,
@@ -29,6 +30,9 @@ const PurePreviewMessage = ({
   setMessages,
   reload,
   isReadonly,
+  isEditing,
+  onEditStart,
+  onEditEnd,
 }: {
   chatId: string;
   message: UIMessage;
@@ -37,8 +41,26 @@ const PurePreviewMessage = ({
   setMessages: UseChatHelpers['setMessages'];
   reload: UseChatHelpers['reload'];
   isReadonly: boolean;
+  isEditing: boolean;
+  onEditStart: (messageId: string) => void;
+  onEditEnd: () => void;
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
+
+  const handleEditClick = () => {
+    onEditStart(message.id);
+    setMode('edit');
+  };
+
+  const handleCancelEdit = () => {
+    setMode('view');
+    onEditEnd();
+  };
+
+  const handleSaveEdit = async () => {
+    setMode('view');
+    onEditEnd();
+  };
 
   return (
     <AnimatePresence>
@@ -107,9 +129,7 @@ const PurePreviewMessage = ({
                               data-testid="message-edit-button"
                               variant="ghost"
                               className="px-2 h-fit rounded-full text-muted-foreground opacity-0 group-hover/message:opacity-100"
-                              onClick={() => {
-                                setMode('edit');
-                              }}
+                              onClick={handleEditClick}
                             >
                               <PencilEditIcon />
                             </Button>
@@ -137,9 +157,8 @@ const PurePreviewMessage = ({
                       <div className="size-8" />
 
                       <MessageEditor
-                        key={message.id}
                         message={message}
-                        setMode={setMode}
+                        setMode={handleSaveEdit}
                         setMessages={setMessages}
                         reload={reload}
                       />
