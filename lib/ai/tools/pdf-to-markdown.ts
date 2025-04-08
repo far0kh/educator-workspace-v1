@@ -5,8 +5,8 @@ import { PDFExtract } from 'pdf.js-extract';
 const pdfExtract = new PDFExtract();
 
 // Get limitations from environment variables
-const MAX_FILE_SIZE_MB = parseInt(process.env.PDF_MAX_FILE_SIZE_MB || '2', 10);
-const MAX_PAGE_COUNT = parseInt(process.env.PDF_MAX_PAGE_COUNT || '20', 10);
+const MAX_FILE_SIZE_MB = parseInt(process.env.MAX_FILE_SIZE_MB || '5', 10);
+const MAX_PAGE_COUNT = parseInt(process.env.PDF_MAX_PAGE_COUNT || '50', 10);
 
 interface PDFItem {
   str: string;

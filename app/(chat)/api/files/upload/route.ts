@@ -4,12 +4,14 @@ import { z } from 'zod';
 
 import { auth } from '@clerk/nextjs/server';
 
+const MAX_FILE_SIZE_MB = parseInt(process.env.MAX_FILE_SIZE_MB || '5', 10);
+
 // Use Blob instead of File since File is not available in Node.js environment
 const FileSchema = z.object({
   file: z
     .instanceof(Blob)
-    .refine((file) => file.size <= 5 * 1024 * 1024, {
-      message: 'File size should be less than 5MB',
+    .refine((file) => file.size <= MAX_FILE_SIZE_MB * 1024 * 1024, {
+      message: `File size should be less than ${MAX_FILE_SIZE_MB}MB`,
     })
     // Update the file type based on the kind of files you want to accept
     .refine((file) => ['image/jpeg', 'image/png', 'application/pdf'].includes(file.type), {
