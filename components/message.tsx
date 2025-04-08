@@ -20,6 +20,7 @@ import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
 import { UseChatHelpers } from '@ai-sdk/react';
 import { WebScraper } from './web-scraper';
+import { PdfToMarkdown } from './pdf-to-markdown';
 import { useScrollToBottom } from './use-scroll-to-bottom';
 
 const PurePreviewMessage = ({
@@ -178,13 +179,15 @@ const PurePreviewMessage = ({
                     <div
                       key={toolCallId}
                       className={cx({
-                        skeleton: ['getWeather', 'webScraper'].includes(toolName),
+                        skeleton: ['getWeather', 'webScraper', 'pdfToMarkdown'].includes(toolName),
                       })}
                     >
                       {toolName === 'getWeather' ? (
                         <Weather />
                       ) : toolName === 'webScraper' ? (
                         <WebScraper />
+                      ) : toolName === 'pdfToMarkdown' ? (
+                        <PdfToMarkdown />
                       ) : toolName === 'createDocument' ? (
                         <DocumentPreview isReadonly={isReadonly} args={args} />
                       ) : toolName === 'updateDocument' ? (
@@ -213,6 +216,8 @@ const PurePreviewMessage = ({
                         <Weather weatherAtLocation={result} />
                       ) : toolName === 'webScraper' ? (
                         <WebScraper scrapedData={result} />
+                      ) : toolName === 'pdfToMarkdown' ? (
+                        <PdfToMarkdown convertedData={result} />
                       ) : toolName === 'createDocument' ? (
                         <DocumentPreview
                           isReadonly={isReadonly}
