@@ -8,6 +8,7 @@ import {
 import { auth } from '@clerk/nextjs/server';
 import { systemPrompt } from '@/lib/ai/prompts';
 import {
+  deleteChatsByUserId,
   deleteChatById,
   getChatById,
   saveChat,
@@ -190,6 +191,12 @@ export async function DELETE(request: Request) {
   }
 
   try {
+    if (id === 'all') {
+      await deleteChatsByUserId({ id: session.userId });
+
+      return new Response('All chats deleted', { status: 200 });
+    }
+
     const chat = await getChatById({ id });
 
     if (chat.userId !== session.userId) {
