@@ -4,6 +4,10 @@ import { PDFExtract } from 'pdf.js-extract';
 
 const pdfExtract = new PDFExtract();
 
+// Get limitations from environment variables
+const MAX_FILE_SIZE_MB = parseInt(process.env.PDF_MAX_FILE_SIZE_MB || '2', 10);
+const MAX_PAGE_COUNT = parseInt(process.env.PDF_MAX_PAGE_COUNT || '20', 10);
+
 interface PDFItem {
   str: string;
   x: number;
@@ -14,19 +18,40 @@ interface PDFItem {
 }
 
 export const pdfToMarkdown = tool({
-  description: 'Convert PDF content to Markdown text',
+  description: `Convert PDF content to Markdown text. Limitations: Max file size ${MAX_FILE_SIZE_MB}MB, Max pages ${MAX_PAGE_COUNT}`,
   parameters: z.object({
-    // Never use url in parameters, like pdfUrl: z.string().url().describe('The URL of the PDF file to convert'),
+    // Note: Do not edit this line
     pdfUrl: z.string(),
   }),
   execute: async ({ pdfUrl }) => {
     try {
       // Fetch the PDF file
       const response = await fetch(pdfUrl);
+
+      // Check content length
+      const contentLength = response.headers.get('content-length');
+      if (contentLength) {
+        const fileSizeMB = parseInt(contentLength, 10) / (1024 * 1024);
+        if (fileSizeMB > MAX_FILE_SIZE_MB) {
+          return {
+            error: 'PDF file too large',
+            details: `File size (${fileSizeMB.toFixed(2)}MB) exceeds the maximum allowed size of ${MAX_FILE_SIZE_MB}MB`
+          };
+        }
+      }
+
       const pdfBuffer = await response.arrayBuffer();
 
       // Extract text from PDF
       const data = await pdfExtract.extractBuffer(Buffer.from(pdfBuffer));
+
+      // Check page count
+      if (data.pages.length > MAX_PAGE_COUNT) {
+        return {
+          error: 'PDF has too many pages',
+          details: `Page count (${data.pages.length}) exceeds the maximum allowed pages of ${MAX_PAGE_COUNT}`
+        };
+      }
 
       let markdown = '';
 
