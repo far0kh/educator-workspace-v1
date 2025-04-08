@@ -16,7 +16,7 @@ interface PDFItem {
 export const pdfToMarkdown = tool({
   description: 'Convert PDF content to Markdown text',
   parameters: z.object({
-    // pdfUrl: z.string().url().describe('The URL of the PDF file to convert'),
+    // Never use url in parameters, like pdfUrl: z.string().url().describe('The URL of the PDF file to convert'),
     pdfUrl: z.string(),
   }),
   execute: async ({ pdfUrl }) => {
