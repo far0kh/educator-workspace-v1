@@ -99,7 +99,7 @@ const PurePreviewMessage = ({
               if (type === 'text') {
                 if (mode === 'view') {
                   return (
-                    <div key={key} className="flex flex-row gap-2 items-start" dir="auto">
+                    <div key={key} className="flex flex-row gap-2 items-start" dir={`${message.role === 'user' ? 'ltr' : 'auto'}`}>
                       {message.role === 'user' && !isReadonly && (
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -123,6 +123,7 @@ const PurePreviewMessage = ({
                         className={cn('flex flex-col gap-4', {
                           'bg-primary text-primary-foreground px-3 py-2 rounded-xl break-all': message.role === 'user',
                         })}
+                        dir="auto"
                       >
                         <Markdown>{part.text}</Markdown>
                       </div>
