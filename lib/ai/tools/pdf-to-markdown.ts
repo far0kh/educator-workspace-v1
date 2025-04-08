@@ -67,17 +67,19 @@ export const pdfToMarkdown = tool({
         };
       }
 
-      if (data.pages.length > PDF_MAX_PAGE_COUNT) {
-        return {
-          error: 'PDF has too many pages',
-          details: `Page count (${data.pages.length}) exceeds the maximum allowed pages of ${PDF_MAX_PAGE_COUNT}`,
-        };
-      }
+      // if (data.pages.length > PDF_MAX_PAGE_COUNT) {
+      //   return {
+      //     error: 'PDF has too many pages',
+      //     details: `Page count (${data.pages.length}) exceeds the maximum allowed pages of ${PDF_MAX_PAGE_COUNT}`,
+      //   };
+      // }
 
-      let markdown = '';
 
-      for (const page of data.pages) {
-        markdown += `\n\n## Page ${page.pageInfo.num}\n\n`;
+      const dataPages = data.pages.length > PDF_MAX_PAGE_COUNT ? data.pages.slice(0, PDF_MAX_PAGE_COUNT) : data.pages;
+
+      let markdownPages = [];
+      for (const page of dataPages) {
+        let markdown = '';
 
         const sortedItems = page.content.sort((a: PDFItem, b: PDFItem) => a.y - b.y);
 
@@ -87,7 +89,7 @@ export const pdfToMarkdown = tool({
         for (const item of sortedItems) {
           if (item.y - currentY > 5) {
             if (currentLine) {
-              markdown += processLine(currentLine.trim()) + '\n\n';
+              markdown += processLine(currentLine.trim());
               currentLine = '';
             }
             currentY = item.y;
@@ -97,13 +99,17 @@ export const pdfToMarkdown = tool({
         }
 
         if (currentLine) {
-          markdown += processLine(currentLine.trim()) + '\n\n';
+          markdown += processLine(currentLine.trim());
+          // pages.push(page.content.map((item: PDFItem) => processLine(item.str.trim())).join('\n\n'));
+          // markdownPages.push(page.content.map((item: PDFItem) => item.str.trim()).join('\n\n'));
+          markdownPages.push(markdown);
         }
       }
 
       return {
-        content: markdown.trim(),
-        pageCount: data.pages.length,
+        markdownPages,
+        totalPages: data.pages.length,
+        pageCount: dataPages.length,
         metadata: {
           info: data.meta || {},
           version: 'unknown',
@@ -121,17 +127,24 @@ export const pdfToMarkdown = tool({
 
 function processLine(line: string): string {
   if (!line) return '';
+  // console.log('Line: ', line);
 
   if (line.toUpperCase() === line && line.length < 50) {
-    return `# ${line}`;
+    return ` **${line}**\n\n`;
   }
 
   if (line.startsWith('•') || line.startsWith('-')) {
-    return `- ${line.slice(1).trim()}`;
+    // return `- ${line.slice(1).trim()}`;
+    return `\n\n**${line}**\n\n`;
   }
 
   if (line.match(/^\d+\.\s+/)) {
-    return `1. ${line.replace(/^\d+\.\s+/, '')}`;
+    // return `1. ${line.replace(/^\d+\.\s+/, '')}`;
+    return `\n\n**${line}**\n\n`;
+  }
+
+  if (line.length < 50) {
+    return line + '\n\n';
   }
 
   return line;

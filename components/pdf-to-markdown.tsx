@@ -4,7 +4,8 @@ import { Markdown } from './markdown';
 
 interface PdfToMarkdownProps {
   convertedData?: {
-    content: string;
+    markdownPages: string[];
+    totalPages: number;
     pageCount: number;
     metadata: {
       info: any;
@@ -37,14 +38,14 @@ export function PdfToMarkdown({ convertedData }: PdfToMarkdownProps) {
   }
 
   return (
-    <Card className="max-w-2xl">
+    <Card className="max-w-3xl break-words">
       <CardHeader>
         <CardTitle>PDF to Markdown Conversion</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="text-sm text-muted-foreground">
-            <p>Pages: {convertedData.pageCount}</p>
+            <p>Pages: {convertedData.pageCount} of {convertedData.totalPages}</p>
             {convertedData.metadata.info?.Title && (
               <p>Title: {convertedData.metadata.info.Title}</p>
             )}
@@ -52,9 +53,21 @@ export function PdfToMarkdown({ convertedData }: PdfToMarkdownProps) {
               <p>Author: {convertedData.metadata.info.Author}</p>
             )}
           </div>
-          <div className="prose dark:prose-invert max-w-none">
-            <Markdown>{convertedData.content}</Markdown>
-          </div>
+          {convertedData.markdownPages.map((page, index) => (
+            <div
+              key={index}
+              className={cn(
+                'rounded-lg p-4 bg-muted text-muted-foreground',
+                index > 0 ? 'mt-4' : ''
+              )}
+              dir="auto"
+            >
+              {/* <h2 className="text-lg font-semibold border-b-2 border-b-amber-400 pb-1 mb-4">Page {index + 1}</h2> */}
+              <div className="prose-sm text-base dark:prose-invert max-w-none" dir="auto">
+                <Markdown>{page}</Markdown>
+              </div>
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>
