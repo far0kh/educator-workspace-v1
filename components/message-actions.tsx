@@ -3,7 +3,8 @@ import { useSWRConfig } from 'swr';
 import { useCopyToClipboard } from 'usehooks-ts';
 import { cn } from '@/lib/utils';
 import type { Vote } from '@/lib/db/schema';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { CheckIcon } from 'lucide-react';
 
 import { CopyIcon, ThumbDownIcon, ThumbUpIcon, LoaderIcon } from './icons';
 import { Button } from './ui/button';
@@ -32,6 +33,19 @@ export function PureMessageActions({
   const [_, copyToClipboard] = useCopyToClipboard();
   const [isUpvoting, setIsUpvoting] = useState(false);
   const [isDownvoting, setIsDownvoting] = useState(false);
+  const [copyState, setCopyState] = useState<'idle' | 'copying' | 'success'>('idle');
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (copyState === 'success') {
+      timeout = setTimeout(() => {
+        setCopyState('idle');
+      }, 2000);
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [copyState]);
 
   if (isLoading) return null;
   if (message.role === 'user') return null;
@@ -56,11 +70,18 @@ export function PureMessageActions({
                   return;
                 }
 
+                setCopyState('copying');
                 await copyToClipboard(textFromParts);
-                toast.success('Copied to clipboard!');
+                setCopyState('success');
               }}
             >
-              <CopyIcon />
+              {copyState === 'copying' ? (
+                <span className="animate-spin"><LoaderIcon /></span>
+              ) : copyState === 'success' ? (
+                <CheckIcon className="text-green-600" />
+              ) : (
+                <CopyIcon />
+              )}
             </Button>
           </TooltipTrigger>
           <TooltipContent>Copy</TooltipContent>
