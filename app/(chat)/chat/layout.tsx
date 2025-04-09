@@ -19,15 +19,17 @@ export default async function Layout({
   const userData = user ? { id: user.id, email: user.emailAddresses[0]?.emailAddress || '' } : null;
 
   return (
-    <CookiesProvider>
+    <>
       <Script
         src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"
         strategy="beforeInteractive"
       />
       <SidebarProvider defaultOpen={!isCollapsed}>
         <AppSidebar user={userData} />
-        <SidebarInset>{children}</SidebarInset>
+        <SidebarInset>
+          <CookiesProvider>{children}</CookiesProvider>
+        </SidebarInset>
       </SidebarProvider>
-    </CookiesProvider>
+    </>
   );
 }

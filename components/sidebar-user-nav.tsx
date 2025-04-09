@@ -49,12 +49,8 @@ export function SidebarUserNav() {
       method: 'DELETE',
       signal: controller.signal,
     }).then(async () => {
-      setTimeout(async () => {
-        clearTimeout(timeoutId);
-        await mutate('/api/history', undefined, { revalidate: true });
-        router.push('/chat');
-        router.refresh();
-      }, 1500);
+      clearTimeout(timeoutId);
+      router.push('/chat');
     }).catch((error) => {
       if (error.name === 'AbortError') {
         toast.error('Request timed out. Please try again.');
@@ -67,6 +63,10 @@ export function SidebarUserNav() {
     toast.promise(deletePromise, {
       loading: 'Deleting chats...',
       success: () => {
+        setTimeout(async () => {
+          await mutate('/api/history', undefined, { revalidate: true });
+          router.refresh();
+        }, 3000);
         return 'Chats deleted successfully';
       },
       error: 'Failed to delete chats',
