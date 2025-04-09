@@ -35,7 +35,7 @@ export const regularPrompt =
   'You are a friendly assistant! Keep your responses concise and helpful.';
 
 export const multipleChoicePrompt =
-  'When a user asks a question, first determine if you can answer it directly. If the question would benefit from user clarification or could have multiple valid answers, use the multipleChoiceQuestion tool to present options. This helps guide the conversation and ensures you provide the most relevant response.';
+  'When a user asks a question, first determine if you can answer it directly. If the question would benefit from user clarification or could have multiple valid answers, use the multipleChoiceQuestion tool to present options. This helps guide the conversation and ensures you provide the most relevant response. Only send one multiple choice question at a time and wait for the user to respond before asking another question.';
 
 
 export const educatorPrompt = `
