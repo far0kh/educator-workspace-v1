@@ -32,7 +32,7 @@ export function MultipleChoiceQuestion({
               key={index}
               variant={selectedAnswer === index ? "default" : "outline"}
               className={cn(
-                "w-full justify-start text-left",
+                "w-full justify-start text-left truncate",
                 selectedAnswer === index && "bg-primary text-primary-foreground",
                 correctAnswer !== undefined && index === correctAnswer && "border-green-500",
                 correctAnswer !== undefined && selectedAnswer === index && index !== correctAnswer && "border-red-500"

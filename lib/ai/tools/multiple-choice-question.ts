@@ -11,8 +11,6 @@ export const multipleChoiceQuestion = tool({
   execute: async ({ question, options, correctAnswer }) => {
     // This is a special tool that doesn't execute directly
     // Instead, it returns a structured response that the UI will handle
-    console.log(question, options);
-
     return {
       type: "multiple_choice",
       question,
