@@ -17,6 +17,7 @@ interface MessagesProps {
   reload: UseChatHelpers['reload'];
   isReadonly: boolean;
   isArtifactVisible: boolean;
+  append: UseChatHelpers['append'];
 }
 
 function PureMessages({
@@ -27,6 +28,7 @@ function PureMessages({
   setMessages,
   reload,
   isReadonly,
+  append,
 }: MessagesProps) {
   const [messagesContainerRef, messagesEndRef, setAutoScrollEnabled] = useScrollToBottom<HTMLDivElement>();
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
@@ -69,6 +71,7 @@ function PureMessages({
           isEditing={editingMessageId === message.id}
           onEditStart={handleEditStart}
           onEditEnd={handleEditEnd}
+          append={append}
         />
       ))}
 

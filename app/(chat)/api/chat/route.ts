@@ -26,6 +26,7 @@ import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { getWeather } from '@/lib/ai/tools/get-weather';
 import { webScraper } from '@/lib/ai/tools/web-scraper';
 import { pdfToMarkdown } from '@/lib/ai/tools/pdf-to-markdown';
+import { multipleChoiceQuestion } from '@/lib/ai/tools/multiple-choice-question';
 import { myProvider } from '@/lib/ai/providers';
 
 export const maxDuration = 60;
@@ -96,6 +97,7 @@ export async function POST(request: Request) {
                 'requestSuggestions',
                 'webScraper',
                 'pdfToMarkdown',
+                'multipleChoiceQuestion',
               ]
               : [
                 'getWeather',
@@ -103,6 +105,7 @@ export async function POST(request: Request) {
                 'updateDocument',
                 'requestSuggestions',
                 'webScraper',
+                'multipleChoiceQuestion',
               ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,
@@ -116,6 +119,7 @@ export async function POST(request: Request) {
             }),
             webScraper,
             pdfToMarkdown,
+            multipleChoiceQuestion,
           },
           onFinish: async ({ response }) => {
             if (session.userId) {

@@ -2,7 +2,7 @@ import { PreviewMessage } from './message';
 import { useScrollToBottom } from './use-scroll-to-bottom';
 import { Vote } from '@/lib/db/schema';
 import { UIMessage } from 'ai';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import equal from 'fast-deep-equal';
 import { UIArtifact } from './artifact';
 import { UseChatHelpers } from '@ai-sdk/react';
@@ -16,6 +16,7 @@ interface ArtifactMessagesProps {
   reload: UseChatHelpers['reload'];
   isReadonly: boolean;
   artifactStatus: UIArtifact['status'];
+  append: UseChatHelpers['append'];
 }
 
 function PureArtifactMessages({
@@ -26,9 +27,19 @@ function PureArtifactMessages({
   setMessages,
   reload,
   isReadonly,
+  append,
 }: ArtifactMessagesProps) {
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+
+  const handleEditStart = (messageId: string) => {
+    setEditingMessageId(messageId);
+  };
+
+  const handleEditEnd = () => {
+    setEditingMessageId(null);
+  };
 
   return (
     <div
@@ -49,6 +60,10 @@ function PureArtifactMessages({
           setMessages={setMessages}
           reload={reload}
           isReadonly={isReadonly}
+          append={append}
+          isEditing={editingMessageId === message.id}
+          onEditStart={handleEditStart}
+          onEditEnd={handleEditEnd}
         />
       ))}
 

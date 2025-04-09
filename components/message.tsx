@@ -22,6 +22,7 @@ import { UseChatHelpers } from '@ai-sdk/react';
 import { WebScraper } from './web-scraper';
 import { PdfToMarkdown } from './pdf-to-markdown';
 import { useScrollToBottom } from './use-scroll-to-bottom';
+import { MultipleChoiceQuestion } from './multiple-choice-question';
 
 const PurePreviewMessage = ({
   chatId,
@@ -34,6 +35,7 @@ const PurePreviewMessage = ({
   isEditing,
   onEditStart,
   onEditEnd,
+  append,
 }: {
   chatId: string;
   message: UIMessage;
@@ -45,8 +47,10 @@ const PurePreviewMessage = ({
   isEditing: boolean;
   onEditStart: (messageId: string) => void;
   onEditEnd: () => void;
+  append: UseChatHelpers['append'];
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
+  const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>(undefined);
 
   const handleEditClick = () => {
     onEditStart(message.id);
@@ -61,6 +65,23 @@ const PurePreviewMessage = ({
   const handleSaveEdit = async () => {
     setMode('view');
     onEditEnd();
+  };
+
+  const handleAnswer = (index: number) => {
+    setSelectedAnswer(index);
+    // Append the selected answer as a user message
+    const multipleChoicePart = message.parts?.find(part =>
+      part.type === 'tool-invocation' &&
+      part.toolInvocation.toolName === 'multipleChoiceQuestion'
+    );
+
+    if (multipleChoicePart && multipleChoicePart.type === 'tool-invocation' &&
+      multipleChoicePart.toolInvocation.state === 'result') {
+      append({
+        role: 'user',
+        content: multipleChoicePart.toolInvocation.result.options[index] || '',
+      });
+    }
   };
 
   return (
@@ -121,6 +142,13 @@ const PurePreviewMessage = ({
 
               if (type === 'text') {
                 if (mode === 'view') {
+                  // Skip rendering text content if it's part of a multiple choice question
+                  const isMultipleChoiceText = message.parts?.some(part =>
+                    part.type === 'tool-invocation' &&
+                    part.toolInvocation.toolName === 'multipleChoiceQuestion'
+                  );
+                  if (isMultipleChoiceText) return null;
+
                   return (
                     <div key={key} className="flex flex-row gap-2 items-start" dir={`${message.role === 'user' ? 'ltr' : 'auto'}`}>
                       {message.role === 'user' && !isReadonly && (
@@ -234,6 +262,15 @@ const PurePreviewMessage = ({
                           type="request-suggestions"
                           result={result}
                           isReadonly={isReadonly}
+                        />
+                      ) : toolName === 'multipleChoiceQuestion' ? (
+                        <MultipleChoiceQuestion
+                          question={result.question}
+                          options={result.options}
+                          correctAnswer={result.correctAnswer}
+                          onAnswer={handleAnswer}
+                          selectedAnswer={selectedAnswer}
+                          disabled={selectedAnswer !== undefined}
                         />
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>

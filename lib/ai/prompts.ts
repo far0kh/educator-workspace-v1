@@ -32,7 +32,7 @@ Do not update document right after creating it. Wait for user feedback or reques
 `;
 
 export const regularPrompt =
-  'You are a friendly assistant! Keep your responses concise and helpful.';
+  'You are a friendly assistant! Keep your responses concise and helpful. When a user asks a question, first determine if you can answer it directly. If the question would benefit from user clarification or could have multiple valid answers, use the multipleChoiceQuestion tool to present options. This helps guide the conversation and ensures you provide the most relevant response.';
 
 export const educatorPrompt = `
 I am an educator. I want you to act as a course creator assistant.
