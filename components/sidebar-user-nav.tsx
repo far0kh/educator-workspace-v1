@@ -29,11 +29,13 @@ import {
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useSWRConfig } from 'swr';
 
 export function SidebarUserNav() {
   const { setTheme, theme } = useTheme();
   const { user } = useUser();
   const { signOut } = useClerk();
+  const { mutate } = useSWRConfig();
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -48,13 +50,13 @@ export function SidebarUserNav() {
       signal: controller.signal,
     }).then(() => {
       clearTimeout(timeoutId);
+      mutate('/api/history');
       router.push('/chat');
     });
 
     toast.promise(deletePromise, {
       loading: 'Deleting chats...',
       success: () => {
-        location.reload();
         return 'Chats deleted successfully';
       },
       error: 'Failed to delete chats',
