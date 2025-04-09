@@ -49,12 +49,12 @@ export function SidebarUserNav() {
       method: 'DELETE',
       signal: controller.signal,
     }).then(async () => {
-      clearTimeout(timeoutId);
-      router.push('/chat');
       setTimeout(async () => {
+        clearTimeout(timeoutId);
         await mutate('/api/history', undefined, { revalidate: true });
-        // router.refresh();
-      }, 1000);
+        router.push('/chat');
+        router.refresh();
+      }, 1500);
     }).catch((error) => {
       if (error.name === 'AbortError') {
         toast.error('Request timed out. Please try again.');
