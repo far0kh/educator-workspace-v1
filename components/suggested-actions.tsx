@@ -4,20 +4,23 @@ import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { memo } from 'react';
 import { UseChatHelpers } from '@ai-sdk/react';
-import { SuggestedActions as suggestedActions } from "@/constants/en";
+import { SuggestedActions as modelSuggestions } from "@/constants/en";
 
 interface SuggestedActionsProps {
   chatId: string;
   append: UseChatHelpers['append'];
+  selectedModelId: string;
 }
 
-function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
+function PureSuggestedActions({ chatId, append, selectedModelId }: SuggestedActionsProps) {
+  const suggestions = modelSuggestions[selectedModelId] || modelSuggestions['chat-model'];
+
   return (
     <div
       data-testid="suggested-actions"
       className="grid sm:grid-cols-2 gap-2 w-full"
     >
-      {suggestedActions.map((suggestedAction, index) => (
+      {suggestions.map((suggestedAction, index) => (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -5,6 +5,8 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import Script from 'next/script';
 
+import { CookiesProvider } from 'next-client-cookies/server';
+
 export default async function Layout({
   children,
 }: {
@@ -17,7 +19,7 @@ export default async function Layout({
   const userData = user ? { id: user.id, email: user.emailAddresses[0]?.emailAddress || '' } : null;
 
   return (
-    <>
+    <CookiesProvider>
       <Script
         src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"
         strategy="beforeInteractive"
@@ -26,6 +28,6 @@ export default async function Layout({
         <AppSidebar user={userData} />
         <SidebarInset>{children}</SidebarInset>
       </SidebarProvider>
-    </>
+    </CookiesProvider>
   );
 }

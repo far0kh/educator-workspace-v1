@@ -23,6 +23,7 @@ import { Textarea } from './ui/textarea';
 import { SuggestedActions } from './suggested-actions';
 import equal from 'fast-deep-equal';
 import { UseChatHelpers } from '@ai-sdk/react';
+import { useCookies } from 'next-client-cookies';
 
 function PureMultimodalInput({
   chatId,
@@ -179,12 +180,13 @@ function PureMultimodalInput({
     [setAttachments],
   );
 
+  const cookies = useCookies();
   return (
     <div className="relative w-full flex flex-col gap-4">
       {messages.length === 0 &&
         attachments.length === 0 &&
         uploadQueue.length === 0 && (
-          <SuggestedActions append={append} chatId={chatId} />
+          <SuggestedActions append={append} chatId={chatId} selectedModelId={cookies.get('chat-model') || 'chat-model'} />
         )}
 
       <input
