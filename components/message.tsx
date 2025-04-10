@@ -50,7 +50,7 @@ const PurePreviewMessage = ({
   append: UseChatHelpers['append'];
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
-  const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>(undefined);
+  const [selectedAnswers, setSelectedAnswers] = useState<number[] | undefined>(undefined);
 
   const handleEditClick = () => {
     onEditStart(message.id);
@@ -67,9 +67,9 @@ const PurePreviewMessage = ({
     onEditEnd();
   };
 
-  const handleAnswer = (index: number) => {
-    setSelectedAnswer(index);
-    // Append the selected answer as a user message
+  const handleAnswer = (indexes: number[]) => {
+    setSelectedAnswers(indexes);
+    // Append the selected answers as a user message
     const multipleChoicePart = message.parts?.find(part =>
       part.type === 'tool-invocation' &&
       part.toolInvocation.toolName === 'closedEndedQuestion'
@@ -79,7 +79,11 @@ const PurePreviewMessage = ({
       multipleChoicePart.toolInvocation.state === 'result') {
       append({
         role: 'user',
-        content: multipleChoicePart.toolInvocation.result.answerOptions[index] || '',
+        content: indexes.map((index) =>
+          'result' in multipleChoicePart.toolInvocation && multipleChoicePart.toolInvocation.result.answerOptions
+            ? multipleChoicePart.toolInvocation.result.answerOptions[index] || ''
+            : ''
+        ).join(', '),
       });
     }
   };
@@ -283,8 +287,8 @@ const PurePreviewMessage = ({
                             singleChoice={result.singleChoice}
                             instruction={result.instruction}
                             onAnswer={handleAnswer}
-                            selectedAnswer={selectedAnswer}
-                            disabled={selectedAnswer !== undefined}
+                            selectedAnswers={selectedAnswers}
+                            disabled={selectedAnswers !== undefined}
                           />
                         </>
                       ) : (

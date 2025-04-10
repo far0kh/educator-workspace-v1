@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { toast } from 'sonner';
 
 interface MultipleChoiceQuestionProps {
   question: string;
   answerOptions: string[];
   singleChoice: boolean;
   instruction: string;
-  onAnswer: (selectedIndex: number) => void;
-  selectedAnswer?: number;
+  onAnswer: (selectedIndexes: number[]) => void;
+  selectedAnswers?: number[];
   disabled?: boolean;
 }
 
@@ -18,9 +20,11 @@ export function MultipleChoiceQuestion({
   singleChoice,
   instruction,
   onAnswer,
-  selectedAnswer,
+  selectedAnswers,
   disabled = false,
 }: MultipleChoiceQuestionProps) {
+  const [selectedIndexes, setSelectedIndexes] = useState<number[]>(selectedAnswers || []);
+
   return (
     <Card className="w-full max-w-2xl mx-auto my-4">
       <CardContent>
@@ -30,17 +34,28 @@ export function MultipleChoiceQuestion({
           {answerOptions.map((option, index) => (
             <Button
               key={index}
-              variant={selectedAnswer === index ? "default" : "outline"}
+              variant={selectedIndexes?.includes(index) ? "default" : "outline"}
               className={cn(
                 "w-full justify-start text-left truncate",
-                selectedAnswer === index && "bg-primary text-primary-foreground"
+                selectedIndexes?.includes(index) && "bg-primary text-primary-foreground"
               )}
-              onClick={() => !disabled && onAnswer(index)}
+              onClick={() => !disabled && singleChoice ? setSelectedIndexes([index]) : setSelectedIndexes((prev) => prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index])}
               disabled={disabled}
             >
               {option}
             </Button>
           ))}
+        </div>
+        <div className={cn(
+          "mt-4",
+          disabled && "hidden",
+        )}>
+          <Button
+            onClick={() => !disabled && selectedIndexes.length > 0 ? onAnswer(selectedIndexes) : toast.warning("Please select at least one answer.")}
+            disabled={disabled}
+          >
+            Send
+          </Button>
         </div>
       </CardContent>
     </Card>
