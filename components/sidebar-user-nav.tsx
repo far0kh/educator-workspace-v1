@@ -43,12 +43,12 @@ export function SidebarUserNav() {
 
   const handleDelete = async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const deletePromise = fetch(`/api/chat?id=all`, {
       method: 'DELETE',
       signal: controller.signal,
-    }).then(async () => {
+    }).then(() => {
       clearTimeout(timeoutId);
       router.push('/chat');
     }).catch((error) => {

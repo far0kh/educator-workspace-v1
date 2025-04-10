@@ -21,8 +21,8 @@ export function MultipleChoiceQuestion({
 }: MultipleChoiceQuestionProps) {
   return (
     <Card className="w-full max-w-2xl mx-auto my-4">
-      <CardContent className="pt-6">
-        <h3 className="text-lg font-semibold mb-4">{question}</h3>
+      <CardContent>
+        <h3 className="text-lg text-primary/80 font-semibold mb-4">{question}</h3>
         <p className="text-sm text-muted-foreground mb-4">
           You can select one of the options below or type your own answer in the chat.
         </p>

@@ -31,11 +31,34 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 Do not update document right after creating it. Wait for user feedback or request to update it.
 `;
 
-export const regularPrompt =
-  'You are a friendly assistant! Keep your responses concise and helpful.';
+export const regularPrompt = `
+You are a friendly assistant! Keep your responses concise and helpful.
+`;
 
-export const multipleChoicePrompt =
-  'When a user asks a question, first determine if you can answer it directly. If the question would benefit from user clarification or could have multiple valid answers, use the multipleChoiceQuestion tool to present options. This helps guide the conversation and ensures you provide the most relevant response. Only send one multiple choice question at a time and wait for the user to respond before asking another question.';
+export const _multipleChoicePrompt = `
+When asked a question, first determine if you can answer it directly. 
+If the question would benefit from user clarification or could have multiple valid answers, 
+use the multipleChoiceQuestion tool to present options. 
+This helps guide the conversation and ensures you provide the most relevant response. 
+Only send one multiple choice question at a time and wait for the user to respond before asking another question.
+`;
+
+export const multipleChoicePrompt = `
+To enhance interaction, if you need to ask a clarifying question, seek additional information, or present a choice between several options, format your response as a multiple-choice question. 
+Use multiple-choice questions only when you need the user's answer to continue the conversation or give a better response. The answer choices should be clear and limited. Avoid using them too often.
+Use the "multipleChoiceQuestion" tool to present the options. 
+Do not use the "multipleChoiceQuestion" tool more than one time in each response and wait for the user to respond before asking another question.
+If use the "multipleChoiceQuestion" tool, make sure that the question and answer options are not repeated twice in your response unless for further explanation and clarification.
+The "multipleChoiceQuestion" tool can use at the end of your response only.
+
+For example:
+
+* If a user asks about a specific topic and you need to gauge their knowledge level, ask: "What is your level of familiarity with this topic?" and then provide options like "Beginner," "Intermediate," and "Advanced."
+* If a user asks for a choice between two options, ask: "Which option do you prefer?" and then provide the two available options.
+* If you need to confirm if a user wants to proceed with an action, ask: "Are you sure you want to proceed?" and provide "Yes" and "No" as options.
+
+By using this method, you will improve user interaction and help them use your services more effectively.
+`;
 
 
 export const educatorPrompt = `

@@ -142,12 +142,12 @@ const PurePreviewMessage = ({
 
               if (type === 'text') {
                 if (mode === 'view') {
-                  // Skip rendering text content if it's part of a multiple choice question
+                  // Skip rendering text content if it's part of a multiple choice question and not the first part
                   const isMultipleChoiceText = message.parts?.some(part =>
                     part.type === 'tool-invocation' &&
                     part.toolInvocation.toolName === 'multipleChoiceQuestion'
                   );
-                  if (isMultipleChoiceText) return null;
+                  if (isMultipleChoiceText && index > 1) return null;
 
                   return (
                     <div key={key} className="flex flex-row gap-2 items-start" dir={`${message.role === 'user' ? 'ltr' : 'auto'}`}>
@@ -199,6 +199,16 @@ const PurePreviewMessage = ({
               if (type === 'tool-invocation') {
                 const { toolInvocation } = part;
                 const { toolName, toolCallId, state } = toolInvocation;
+
+                // Skip rendering multipleChoiceQuestion twice
+                // If it's the first part, render it, otherwise skip
+                if (toolName === 'multipleChoiceQuestion') {
+                  const isOtherMultipleChoiceText = message.parts?.filter((_, _i) => _i > index).some(part =>
+                    part.type === 'tool-invocation' &&
+                    part.toolInvocation.toolName === 'multipleChoiceQuestion'
+                  );
+                  if (isOtherMultipleChoiceText) return null;
+                }
 
                 if (state === 'call') {
                   const { args } = toolInvocation;
@@ -264,6 +274,7 @@ const PurePreviewMessage = ({
                           isReadonly={isReadonly}
                         />
                       ) : toolName === 'multipleChoiceQuestion' ? (
+
                         <MultipleChoiceQuestion
                           question={result.question}
                           options={result.options}
