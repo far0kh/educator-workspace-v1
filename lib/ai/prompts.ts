@@ -35,29 +35,52 @@ export const regularPrompt = `
 You are a friendly assistant! Keep your responses concise and helpful.
 `;
 
-export const _multipleChoicePrompt = `
-When asked a question, first determine if you can answer it directly. 
-If the question would benefit from user clarification or could have multiple valid answers, 
-use the multipleChoiceQuestion tool to present options. 
-This helps guide the conversation and ensures you provide the most relevant response. 
-Only send one multiple choice question at a time and wait for the user to respond before asking another question.
-`;
+export const closedEndedQuestionPrompt = `
+A closed-ended question asks respondents to choose single/multiple answer(s) from a given list of answer options, typically one-word answers such as “yes/no”, “true/false”, or a set of multiple-choice questions.
+Use closed-ended question when:
 
-export const multipleChoicePrompt = `
-To enhance interaction, if you need to ask a clarifying question, seek additional information, or present a choice between several options, format your response as a multiple-choice question. 
-Use multiple-choice questions only when you need the user's answer to continue the conversation or give a better response. The answer choices should be clear and limited. Avoid using them too often.
-Use the "multipleChoiceQuestion" tool to present the options. 
-Do not use the "multipleChoiceQuestion" tool more than one time in each response and wait for the user to respond before asking another question.
-If use the "multipleChoiceQuestion" tool, make sure that the question and answer options are not repeated twice in your response unless for further explanation and clarification.
-The "multipleChoiceQuestion" tool can use at the end of your response only.
+* You require more information to answer a user's question.
+* You need to confirm a user's intended action before proceeding.
+* You are presenting a set of valid options for the user to choose from.
 
-For example:
+Avoid using closed-ended question for general information delivery; they should only be used for interactive clarification and confirmation.
+Do not ask a closed-ended question if the user has already provided enough information to answer their question.
+Do not ask more than one closed-ended question in one message.
+When asking a closed-ended question, ensure that the question is clear and concise, and that the answer options are relevant to the question.
+When asking a closed-ended question, do not answer it yourself; wait for a response from respondents. 
+Use the "closedEndedQuestion" tool to present the question, answerOptions, singleChoice and instruction.
+Make the question, answerOptions and instruction less wordy and more concise. 
+The singleChoice can be true or false, if respondents are allowed to choose only one answer, it must be true. If respondents are allowed to choose multiple answers, it must be false.
+The instruction explains how to select one or multiple answer(s) from the list, and if there are other possible responses, mention that the responder can type their answer directly in the chat.
+}
 
-* If a user asks about a specific topic and you need to gauge their knowledge level, ask: "What is your level of familiarity with this topic?" and then provide options like "Beginner," "Intermediate," and "Advanced."
-* If a user asks for a choice between two options, ask: "Which option do you prefer?" and then provide the two available options.
-* If you need to confirm if a user wants to proceed with an action, ask: "Are you sure you want to proceed?" and provide "Yes" and "No" as options.
+Examples:
 
-By using this method, you will improve user interaction and help them use your services more effectively.
+* If a user asks about a technical term, and you need to know their background: 
+{
+"question": "What is the target audience's current level of knowledge about machine learning?", 
+"answerOptions": ["Beginner", "Intermediate", "Advanced"],
+"singleChoice": false, 
+"instruction": "Please select one or more options."
+}
+
+* If you can create a document, confirm the action: 
+{
+"question": "Are you sure you want to create a document?", 
+"answerOptions": ["Yes", "No"],
+"singleChoice": true,
+"instruction": "Please choose one."
+}
+
+* If a user asks for available options: 
+{
+"question": "Which of these options would you like to explore?",  
+"answerOptions": ["Option A", "Option B", "Option C"],
+"singleChoice": false,
+"instruction": "Choose options or type your answer."
+ }
+
+Your goal is to ensure clear communication and prevent ambiguity by using multiple-choice closed-ended questions.
 `;
 
 
@@ -75,9 +98,9 @@ export const systemPrompt = ({
   selectedChatModel: string;
 }) => {
   if (selectedChatModel === 'chat-model-educator') {
-    return `${regularPrompt}\n\n${educatorPrompt}\n\n${multipleChoicePrompt}\n\n${artifactsPrompt}`;
+    return `${regularPrompt}\n\n${educatorPrompt}\\n\n${artifactsPrompt}\n\n${closedEndedQuestionPrompt}`;
   }
-  return `${regularPrompt}\n\n${multipleChoicePrompt}\n\n${artifactsPrompt}`;
+  return `${regularPrompt}\n\n${artifactsPrompt}\n\n${closedEndedQuestionPrompt}`;
 };
 
 export const codePrompt = `

@@ -72,14 +72,14 @@ const PurePreviewMessage = ({
     // Append the selected answer as a user message
     const multipleChoicePart = message.parts?.find(part =>
       part.type === 'tool-invocation' &&
-      part.toolInvocation.toolName === 'multipleChoiceQuestion'
+      part.toolInvocation.toolName === 'closedEndedQuestion'
     );
 
     if (multipleChoicePart && multipleChoicePart.type === 'tool-invocation' &&
       multipleChoicePart.toolInvocation.state === 'result') {
       append({
         role: 'user',
-        content: multipleChoicePart.toolInvocation.result.options[index] || '',
+        content: multipleChoicePart.toolInvocation.result.answerOptions[index] || '',
       });
     }
   };
@@ -142,10 +142,10 @@ const PurePreviewMessage = ({
 
               if (type === 'text') {
                 if (mode === 'view') {
-                  // Skip rendering text content if it's part of a multiple choice question and not the first part
+                  // Skip rendering text content after the closed-ended questions
                   const isMultipleChoiceText = message.parts?.some(part =>
                     part.type === 'tool-invocation' &&
-                    part.toolInvocation.toolName === 'multipleChoiceQuestion'
+                    part.toolInvocation.toolName === 'closedEndedQuestion'
                   );
                   if (isMultipleChoiceText && index > 1) return null;
 
@@ -200,15 +200,15 @@ const PurePreviewMessage = ({
                 const { toolInvocation } = part;
                 const { toolName, toolCallId, state } = toolInvocation;
 
-                // Skip rendering multipleChoiceQuestion twice
-                // If it's the first part, render it, otherwise skip
-                if (toolName === 'multipleChoiceQuestion') {
-                  const isOtherMultipleChoiceText = message.parts?.filter((_, _i) => _i > index).some(part =>
-                    part.type === 'tool-invocation' &&
-                    part.toolInvocation.toolName === 'multipleChoiceQuestion'
-                  );
-                  if (isOtherMultipleChoiceText) return null;
-                }
+                // // Skip rendering closedEndedQuestion twice
+                // // If it's the first part, render it, otherwise skip
+                // if (toolName === 'closedEndedQuestion') {
+                //   const isOtherMultipleChoiceText = message.parts?.filter((_, _i) => _i > index).some(part =>
+                //     part.type === 'tool-invocation' &&
+                //     part.toolInvocation.toolName === 'closedEndedQuestion'
+                //   );
+                //   if (isOtherMultipleChoiceText) return null;
+                // }
 
                 if (state === 'call') {
                   const { args } = toolInvocation;
@@ -273,16 +273,20 @@ const PurePreviewMessage = ({
                           result={result}
                           isReadonly={isReadonly}
                         />
-                      ) : toolName === 'multipleChoiceQuestion' ? (
+                      ) : toolName === 'closedEndedQuestion' ? (
+                        <>
+                          {/* <pre>{JSON.stringify(result, null, 2)}</pre> */}
 
-                        <MultipleChoiceQuestion
-                          question={result.question}
-                          options={result.options}
-                          correctAnswer={result.correctAnswer}
-                          onAnswer={handleAnswer}
-                          selectedAnswer={selectedAnswer}
-                          disabled={selectedAnswer !== undefined}
-                        />
+                          <MultipleChoiceQuestion
+                            question={result.question}
+                            answerOptions={result.answerOptions}
+                            singleChoice={result.singleChoice}
+                            instruction={result.instruction}
+                            onAnswer={handleAnswer}
+                            selectedAnswer={selectedAnswer}
+                            disabled={selectedAnswer !== undefined}
+                          />
+                        </>
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>
                       )}
