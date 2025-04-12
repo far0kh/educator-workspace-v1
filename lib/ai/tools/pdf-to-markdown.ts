@@ -77,7 +77,7 @@ export const pdfToMarkdown = tool({
 
       const dataPages = data.pages.length > PDF_MAX_PAGE_COUNT ? data.pages.slice(0, PDF_MAX_PAGE_COUNT) : data.pages;
 
-      let markdownPages = [];
+      const markdownPages = [];
       for (const page of dataPages) {
         let markdown = '';
 

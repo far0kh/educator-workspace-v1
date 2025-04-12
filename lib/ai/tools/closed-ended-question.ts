@@ -2,7 +2,7 @@ import { tool } from 'ai';
 import { z } from 'zod';
 
 export const closedEndedQuestion = tool({
-  description: 'Ask a multiple-choice closed-ended question',
+  description: 'Generates a multiple-choice UI for user interaction, facilitating clear and concise information gathering through closed-ended questions.',
   parameters: z.object({
     question: z.string(),
     answerOptions: z.string().array(),
@@ -13,12 +13,7 @@ export const closedEndedQuestion = tool({
     // This is a special tool that doesn't execute directly
     // Instead, it returns a structured response that the UI will handle
     return {
-      type: "multiple_choice",
-      question,
-      answerOptions,
-      singleChoice,
-      instruction,
-      timestamp: new Date().toISOString(),
+      content: 'A multiple-choice question was created and is now visible to the user.',
     };
   },
 });

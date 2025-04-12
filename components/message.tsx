@@ -36,6 +36,7 @@ const PurePreviewMessage = ({
   onEditStart,
   onEditEnd,
   append,
+  isLastMessage,
 }: {
   chatId: string;
   message: UIMessage;
@@ -48,9 +49,12 @@ const PurePreviewMessage = ({
   onEditStart: (messageId: string) => void;
   onEditEnd: () => void;
   append: UseChatHelpers['append'];
+  isLastMessage: boolean;
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [selectedAnswers, setSelectedAnswers] = useState<number[] | undefined>(undefined);
+
+  // console.log('message', message);
 
   const handleEditClick = () => {
     onEditStart(message.id);
@@ -75,15 +79,14 @@ const PurePreviewMessage = ({
       part.toolInvocation.toolName === 'closedEndedQuestion'
     );
 
-    if (multipleChoicePart && multipleChoicePart.type === 'tool-invocation' &&
-      multipleChoicePart.toolInvocation.state === 'result') {
+    if (multipleChoicePart && multipleChoicePart.type === 'tool-invocation') {
+      const content = indexes.map((index) =>
+        multipleChoicePart.toolInvocation.args.answerOptions[index] || ''
+      ).join(', ');
+
       append({
         role: 'user',
-        content: indexes.map((index) =>
-          'result' in multipleChoicePart.toolInvocation && multipleChoicePart.toolInvocation.result.answerOptions
-            ? multipleChoicePart.toolInvocation.result.answerOptions[index] || ''
-            : ''
-        ).join(', '),
+        content,
       });
     }
   };
@@ -244,13 +247,27 @@ const PurePreviewMessage = ({
                           args={args}
                           isReadonly={isReadonly}
                         />
+                        // ) : toolName === 'closedEndedQuestion' ? (
+                        //   <>
+                        //     {/* <pre>{JSON.stringify(args, null, 2)}</pre> */}
+
+                        //     <MultipleChoiceQuestion
+                        //       question={args.question}
+                        //       answerOptions={args.answerOptions}
+                        //       singleChoice={args.singleChoice}
+                        //       instruction={args.instruction}
+                        //       onAnswer={handleAnswer}
+                        //       selectedAnswers={selectedAnswers}
+                        //       disabled={selectedAnswers !== undefined}
+                        //     />
+                        //   </>
                       ) : null}
                     </div>
                   );
                 }
 
                 if (state === 'result') {
-                  const { result } = toolInvocation;
+                  const { args, result } = toolInvocation;
 
                   return (
                     <div key={toolCallId}>
@@ -281,15 +298,15 @@ const PurePreviewMessage = ({
                         <>
                           {/* <pre>{JSON.stringify(result, null, 2)}</pre> */}
 
-                          <MultipleChoiceQuestion
-                            question={result.question}
-                            answerOptions={result.answerOptions}
-                            singleChoice={result.singleChoice}
-                            instruction={result.instruction}
+                          {isLastMessage && <MultipleChoiceQuestion
+                            question={args.question}
+                            answerOptions={args.answerOptions}
+                            singleChoice={args.singleChoice}
+                            instruction={args.instruction}
                             onAnswer={handleAnswer}
                             selectedAnswers={selectedAnswers}
                             disabled={selectedAnswers !== undefined}
-                          />
+                          />}
                         </>
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>

@@ -61,6 +61,7 @@ function PureArtifactMessages({
           reload={reload}
           isReadonly={isReadonly}
           append={append}
+          isLastMessage={messages.length - 1 === index}
           isEditing={editingMessageId === message.id}
           onEditStart={handleEditStart}
           onEditEnd={handleEditEnd}

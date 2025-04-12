@@ -72,6 +72,7 @@ function PureMessages({
           onEditStart={handleEditStart}
           onEditEnd={handleEditEnd}
           append={append}
+          isLastMessage={messages.length - 1 === index}
         />
       ))}
 

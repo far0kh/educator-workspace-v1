@@ -48,7 +48,7 @@ export function projectWithPositions(
   doc: Node,
   suggestions: Array<Suggestion>,
 ): Array<UISuggestion> {
-  return suggestions.map((suggestion) => {
+  return suggestions?.map((suggestion) => {
     const positions = findPositionsInDoc(doc, suggestion.originalText);
 
     if (!positions) {
