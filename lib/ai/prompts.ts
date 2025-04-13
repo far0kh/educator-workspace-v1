@@ -36,15 +36,20 @@ You are a friendly assistant! Keep your responses concise and helpful.
 `;
 
 export const closedEndedQuestionPrompt = `
-This is a guide for using the \`closedEndedQuestion\` tool, which render a closed-ended question on a special UI.
+You can generate clear and concise multiple-choice closed-ended questions when necessary to interact with users and gather specific information. 
+You can use the \`closedEndedQuestion\` tool to ask a multiple-choice closed-ended question and handle user responses.
+
+# This is a guide for using the \`closedEndedQuestion\` tool, which render a closed-ended question on a special UI with multiple answer options.
 
 **When to use \`closedEndedQuestion\`:**
-- Clarification: Generate a multiple-choice question to clarify needed info.
-- Confirmation: Generate a multiple-choice question for confirmation of user action.
-- Option selection: Generate a multiple-choice question for selection of options.
+- Clarification: Generate a multiple-choice closed-ended question to clarify needed info.
+- Confirmation: Generate a multiple-choice closed-ended question for confirmation of user action.
+- Option selection: Generate a multiple-choice closed-ended question for selection of options.
 
 **When NOT to use \`closedEndedQuestion\`:**
-- Already having sufficient information and no need for a closed-ended question
+- Already having sufficient information and no need for a multiple-choice closed-ended question
+- When you have a clear single answer and no need for a multiple-choice closed-ended question
+- When you have a open-ended question with a wide range of answers
 
 **Example:**
 
@@ -118,9 +123,9 @@ export const systemPrompt = ({
   selectedChatModel: string;
 }) => {
   if (selectedChatModel === 'chat-model-educator') {
-    return `${regularPrompt}\n\n${educatorPrompt}\\n\n${artifactsPrompt}\n\n${closedEndedQuestionPrompt}`;
+    return `${regularPrompt}\n\n${educatorPrompt}\n\n${closedEndedQuestionPrompt}\n\n${artifactsPrompt}`;
   }
-  return `${regularPrompt}\n\n${artifactsPrompt}\n\n${closedEndedQuestionPrompt}`;
+  return `${regularPrompt}\n\n${closedEndedQuestionPrompt}\n\n${artifactsPrompt}`;
 };
 
 export const codePrompt = `

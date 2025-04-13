@@ -1,4 +1,3 @@
-import { table } from 'console';
 import type { InferSelectModel } from 'drizzle-orm';
 import {
   pgTable,
@@ -10,7 +9,6 @@ import {
   primaryKey,
   foreignKey,
   boolean,
-  index,
 } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('User', {
@@ -95,12 +93,11 @@ export const vote = pgTable(
       .references(() => message.id),
     isUpvoted: boolean('isUpvoted').notNull(),
   },
-  (t) => [index('pk').on(t.chatId, t.messageId)],
-  // (table) => {
-  //   return {
-  //     pk: primaryKey({ columns: [table.chatId, table.messageId] }),
-  //   };
-  // },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.chatId, table.messageId] }),
+    };
+  },
 );
 
 export type Vote = InferSelectModel<typeof vote>;

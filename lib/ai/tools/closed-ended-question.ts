@@ -13,7 +13,7 @@ export const closedEndedQuestion = tool({
     // This is a special tool that doesn't execute directly
     // Instead, it returns a structured response that the UI will handle
     return {
-      content: 'A multiple-choice question was created and is now visible to the user.',
+      content: question,
     };
   },
 });

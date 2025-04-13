@@ -3,7 +3,7 @@
 import type { UIMessage } from 'ai';
 import cx from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import type { Vote } from '@/lib/db/schema';
 import { DocumentToolCall, DocumentToolResult } from './document';
 import { PencilEditIcon, SparklesIcon } from './icons';
@@ -52,9 +52,17 @@ const PurePreviewMessage = ({
   isLastMessage: boolean;
 }) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view');
+  const [lastPartIndex, setLastPartIndex] = useState<number>(-1);
   const [selectedAnswers, setSelectedAnswers] = useState<number[] | undefined>(undefined);
 
-  // console.log('message', message);
+  useEffect(() => {
+    // Skip rendering content after the closed-ended questions
+    const closedEndedQuestionIndex = message.parts.findIndex((part) =>
+      part.type === 'tool-invocation' &&
+      part.toolInvocation.toolName === 'closedEndedQuestion'
+    );
+    setLastPartIndex(closedEndedQuestionIndex);
+  }, [message]);
 
   const handleEditClick = () => {
     onEditStart(message.id);
@@ -134,6 +142,8 @@ const PurePreviewMessage = ({
             )}
 
             {message.parts?.map((part, index) => {
+              if (lastPartIndex !== -1 && index > lastPartIndex) return null;
+
               const { type } = part;
               const key = `message-${message.id}-part-${index}`;
 
@@ -149,13 +159,6 @@ const PurePreviewMessage = ({
 
               if (type === 'text') {
                 if (mode === 'view') {
-                  // Skip rendering text content after the closed-ended questions
-                  const isMultipleChoiceText = message.parts?.some(part =>
-                    part.type === 'tool-invocation' &&
-                    part.toolInvocation.toolName === 'closedEndedQuestion'
-                  );
-                  if (isMultipleChoiceText && index > 1) return null;
-
                   return (
                     <div key={key} className="flex flex-row gap-2 items-start" dir={`${message.role === 'user' ? 'ltr' : 'auto'}`}>
                       {message.role === 'user' && !isReadonly && (
@@ -206,16 +209,6 @@ const PurePreviewMessage = ({
               if (type === 'tool-invocation') {
                 const { toolInvocation } = part;
                 const { toolName, toolCallId, state } = toolInvocation;
-
-                // // Skip rendering closedEndedQuestion twice
-                // // If it's the first part, render it, otherwise skip
-                // if (toolName === 'closedEndedQuestion') {
-                //   const isOtherMultipleChoiceText = message.parts?.filter((_, _i) => _i > index).some(part =>
-                //     part.type === 'tool-invocation' &&
-                //     part.toolInvocation.toolName === 'closedEndedQuestion'
-                //   );
-                //   if (isOtherMultipleChoiceText) return null;
-                // }
 
                 if (state === 'call') {
                   const { args } = toolInvocation;
