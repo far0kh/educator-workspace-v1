@@ -37,6 +37,7 @@ You are a friendly assistant! Keep your responses concise and helpful.
 
 export const closedEndedQuestionPrompt = `
 You can generate clear and concise multiple-choice closed-ended questions when necessary to interact with users and gather specific information. 
+When generating multiple-choice closed-ended questions, avoid repeating the question or answer options in your response unless necessary for clarification or description.
 You can use the \`closedEndedQuestion\` tool to ask a multiple-choice closed-ended question and handle user responses.
 
 # This is a guide for using the \`closedEndedQuestion\` tool, which render a closed-ended question on a special UI with multiple answer options.
@@ -45,11 +46,13 @@ You can use the \`closedEndedQuestion\` tool to ask a multiple-choice closed-end
 - Clarification: Generate a multiple-choice closed-ended question to clarify needed info.
 - Confirmation: Generate a multiple-choice closed-ended question for confirmation of user action.
 - Option selection: Generate a multiple-choice closed-ended question for selection of options.
+- Everytime you make a multiple-choice closed-ended question.
 
 **When NOT to use \`closedEndedQuestion\`:**
 - Already having sufficient information and no need for a multiple-choice closed-ended question
 - When you have a clear single answer and no need for a multiple-choice closed-ended question
 - When you have a open-ended question with a wide range of answers
+- When you have a closed-ended question that is still pending.
 
 **Example:**
 
