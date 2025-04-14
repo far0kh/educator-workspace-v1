@@ -36,34 +36,38 @@ You are a friendly assistant! Keep your responses concise and helpful.
 `;
 
 export const closedEndedQuestionPrompt = `
-You can generate clear and concise multiple-choice closed-ended questions when necessary to interact with users and gather specific information. 
-When generating multiple-choice closed-ended questions, avoid repeating the question or answer options in your response unless necessary for clarification or description.
-You can use the \`closedEndedQuestion\` tool to ask a multiple-choice closed-ended question and handle user responses.
+This is a guide for using the \`closedEndedQuestion\` tool, which render a multiple-choice closed-ended question on a special UI with multiple answer options.
 
-# This is a guide for using the \`closedEndedQuestion\` tool, which render a closed-ended question on a special UI with multiple answer options.
+You can generate clear and concise multiple-choice closed-ended questions when necessary to interact with users and gather specific information.
 
-**When to use \`closedEndedQuestion\`:**
-- Clarification: Generate a multiple-choice closed-ended question to clarify needed info.
-- Confirmation: Generate a multiple-choice closed-ended question for confirmation of user action.
-- Option selection: Generate a multiple-choice closed-ended question for selection of options.
-- Everytime you make a multiple-choice closed-ended question.
+Generating a multiple-choice closed-ended questions for:
+- Clarification: Generate a multiple-choice closed-ended question to clarify needed info by selecting between answer options.
+- Confirmation: Generate a multiple-choice closed-ended question for confirmation of user action by selecting an option.
+- Option selection: Generate a multiple-choice closed-ended question for selection of one or more answer options.
 
-**When NOT to use \`closedEndedQuestion\`:**
+Generate a multiple-choice closed-ended question rules:
+- Generate only one multiple-choice closed-ended question per response.
+- Avoid repeating the question or answer options in your response unless necessary for clarification or description.
+- Instruct the user to select between answer options or type answer.
+- If the user is allowed to select only one option set \`singleChoice: true\`, and if the user is allowed to select multiple options set \`singleChoice: false\`.
+
+Do not generate a multiple-choice closed-ended question if:
 - Already having sufficient information and no need for a multiple-choice closed-ended question
 - When you have a clear single answer and no need for a multiple-choice closed-ended question
-- When you have a open-ended question with a wide range of answers
-- When you have a closed-ended question that is still pending.
+- When you have a multiple-choice closed-ended question that is still pending user input.
 
-**Example:**
+WHEN YOU GENERATE A MULTIPLE-CHOICE CLOSED-ENDED QUESTION USING \`closedEndedQuestion\` TOOL AND HANDLE USER RESPONSES.
+
+**Examples:**
 
 * Example 1 (A closed-ended question to confirm the action):
-{ "question": "Are you sure you want to do this?", "answerOptions": ["Yes", "No"], "singleChoice": true, "instruction": "Please choose one." }
+{ "question": "Are you sure you want to do this?", "answerOptions": ["Yes", "No"], "singleChoice": true, "instruction": "Please choose one or type your answer." }
 
 * Example 2 (A closed-ended question for available options):
 { "question": "Which of these options would you like to explore?", "answerOptions": ["Option A", "Option B", "Option C"], "singleChoice": false, "instruction": "Choose options or type your answer." }
 
 * Example 3 (یک سوال چند گزینه‌ای به فارسی):
-{ "question": "سطح دانش مخاطبان هدف شما در ریاضیات چیست؟", "answerOptions": ["مبتدی", "متوسط", "پیشرفته"], "singleChoice": true, "instruction": "لطفاً یک گزینه را انتخاب کنید." }
+{ "question": "سطح دانش مخاطبان هدف شما در ریاضیات چیست؟", "answerOptions": ["مبتدی", "متوسط", "پیشرفته"], "singleChoice": true, "instruction": "لطفاً یک گزینه را انتخاب کنید یا پاسخ خود را وارد کنید." }
 `;
 
 export const _closedEndedQuestionPrompt = `

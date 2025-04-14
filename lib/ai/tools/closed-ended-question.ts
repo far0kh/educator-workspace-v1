@@ -13,7 +13,9 @@ export const closedEndedQuestion = tool({
     // This is a special tool that doesn't execute directly
     // Instead, it returns a structured response that the UI will handle
     return {
-      content: question,
+      tool: 'closedEndedQuestion',
+      question,
+      content: 'pending user input...',
     };
   },
 });

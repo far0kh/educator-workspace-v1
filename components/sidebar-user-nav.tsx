@@ -48,18 +48,11 @@ export function SidebarUserNav() {
     const deletePromise = fetch(`/api/chat?id=all`, {
       method: 'DELETE',
       signal: controller.signal,
-    }).then(async () => {
-      mutate('/api/history').then(() => {
-        clearTimeout(timeoutId);
-        router.push('/chat');
-        router.refresh();
-      }).catch((error) => {
-        console.log(error);
-
-        toast.error('Failed to delete history. Please refresh.');
-        window.history.replaceState(null, '', '/chat');
-        location.reload();
-      });
+    }).then(() => {
+      clearTimeout(timeoutId);
+      mutate('/api/history', [], false);
+      router.push('/chat');
+      router.refresh();
     }).catch((error) => {
       if (error.name === 'AbortError') {
         toast.error('Request timed out. Please try again.');
