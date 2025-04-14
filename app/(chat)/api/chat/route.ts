@@ -8,7 +8,6 @@ import {
 import { auth } from '@clerk/nextjs/server';
 import { systemPrompt } from '@/lib/ai/prompts';
 import {
-  deleteChatsByUserId,
   deleteChatById,
   getChatById,
   saveChat,
@@ -29,7 +28,7 @@ import { pdfToMarkdown } from '@/lib/ai/tools/pdf-to-markdown';
 import { closedEndedQuestion } from '@/lib/ai/tools/closed-ended-question';
 import { myProvider } from '@/lib/ai/providers';
 
-export const maxDuration = 60;
+// export const maxDuration = 60;
 
 export async function POST(request: Request) {
   try {
@@ -55,7 +54,7 @@ export async function POST(request: Request) {
       return new Response('No user message found', { status: 400 });
     }
 
-    const chat = await getChatById({ id });
+    const chat = await getChatById({ userId: session.userId, id });
 
     if (!chat) {
       const title = await generateTitleFromUserMessage({
@@ -63,10 +62,6 @@ export async function POST(request: Request) {
       });
 
       await saveChat({ id, userId: session.userId, title });
-    } else {
-      if (chat.userId !== session.userId) {
-        return new Response('Unauthorized', { status: 401 });
-      }
     }
 
     await saveMessages({
@@ -185,7 +180,7 @@ export async function DELETE(request: Request) {
   const id = searchParams.get('id');
 
   if (!id) {
-    return new Response('Not Found', { status: 404 });
+    return new Response('Missing chat id', { status: 404 });
   }
 
   const session = await auth();
@@ -195,16 +190,10 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    if (id === 'all') {
-      await deleteChatsByUserId({ id: session.userId });
+    const chat = await getChatById({ userId: session.userId, id });
 
-      return new Response('All chats deleted', { status: 200 });
-    }
-
-    const chat = await getChatById({ id });
-
-    if (chat.userId !== session.userId) {
-      return new Response('Unauthorized', { status: 401 });
+    if (!chat) {
+      return new Response('Chat not found', { status: 404 });
     }
 
     await deleteChatById({ id });

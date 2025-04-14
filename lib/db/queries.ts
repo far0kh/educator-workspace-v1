@@ -106,9 +106,11 @@ export async function getChatsByUserId({ id }: { id: string }) {
   }
 }
 
-export async function getChatById({ id }: { id: string }) {
+export async function getChatById({ userId, id }: { userId?: string, id: string }) {
   try {
-    const [selectedChat] = await db.select().from(chat).where(eq(chat.id, id));
+    const [selectedChat] = userId ?
+      await db.select().from(chat).where(eq(chat.userId, userId) && eq(chat.id, id)) :
+      await db.select().from(chat).where(eq(chat.id, id));
     return selectedChat;
   } catch (error) {
     console.error('Failed to get chat by id from database');

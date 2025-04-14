@@ -15,14 +15,10 @@ export async function GET(request: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const chat = await getChatById({ id: chatId });
+  const chat = await getChatById({ userId: session.userId, id: chatId });
 
   if (!chat) {
     return new Response('Chat not found', { status: 404 });
-  }
-
-  if (chat.userId !== session.userId) {
-    return new Response('Unauthorized', { status: 401 });
   }
 
   const votes = await getVotesByChatId({ id: chatId });
@@ -48,14 +44,10 @@ export async function PATCH(request: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const chat = await getChatById({ id: chatId });
+  const chat = await getChatById({ userId: session.userId, id: chatId });
 
   if (!chat) {
     return new Response('Chat not found', { status: 404 });
-  }
-
-  if (chat.userId !== session.userId) {
-    return new Response('Unauthorized', { status: 401 });
   }
 
   await voteMessage({
