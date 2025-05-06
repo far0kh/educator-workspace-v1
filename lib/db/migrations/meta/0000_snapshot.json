@@ -1,5 +1,5 @@
 {
-  "id": "73a9be67-1058-4eea-b156-63dfe8e79935",
+  "id": "56f94cab-3282-4d3d-9a29-37a34b1dba25",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -417,7 +417,29 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "pk": {
+          "name": "pk",
+          "columns": [
+            {
+              "expression": "chatId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "messageId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "Vote_v2_chatId_Chat_id_fk": {
           "name": "Vote_v2_chatId_Chat_id_fk",
@@ -446,15 +468,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "Vote_v2_chatId_messageId_pk": {
-          "name": "Vote_v2_chatId_messageId_pk",
-          "columns": [
-            "chatId",
-            "messageId"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
